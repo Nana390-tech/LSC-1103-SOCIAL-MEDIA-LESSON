@@ -1,256 +1,270 @@
 !DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>LSC 1103 – Social Media Communication Lab</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
 <style>
-  body { font-family: 'Segoe UI', sans-serif; }
-  .rotate-90 { transform: rotate(90deg); }
-  textarea:focus { outline: none; }
+  body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #ede9fe, #fdf2f8, #f0fdfa); min-height: 100vh; }
+  button { cursor: pointer; transition: all 0.15s; }
+  textarea { font-family: 'Segoe UI', sans-serif; }
+  .chevron { display: inline-block; transition: transform 0.2s; }
+  .chevron.open { transform: rotate(90deg); }
 </style>
 </head>
-<body class="bg-gradient-to-br from-purple-100 via-pink-50 to-teal-100 min-h-screen pb-10">
+<body class="pb-10">
 <div id="root"></div>
 
 <script type="text/babel">
 const { useState, useCallback } = React;
 
-// ─── DATA ─────────────────────────────────────────────────────────────
+/* ── DATA ─────────────────────────────────────────────────────────── */
 const concepts = [
   {
-    group: "📣 Purposes of Social Media Posts", color: "purple",
-    items: [
-      { term: "To Inform",          icon: "ℹ️", def: "Share facts or knowledge clearly. Answers What? When? Where? Why?", ex: "\"Our new opening hours are from 9 AM to 5 PM starting tomorrow.\"" },
-      { term: "To Advertise",       icon: "🛒", def: "Promote a product or service. Highlights features, discounts, or benefits.", ex: "\"Buy one, get one free! Limited offer on our skincare range.\"" },
-      { term: "To Announce",        icon: "📢", def: "Share important updates — new hires, launches, or events.", ex: "\"We are thrilled to announce the launch of our new mobile app next week!\"" },
-      { term: "To Warn",            icon: "⚠️", def: "Alert the audience about potential risks or dangers.", ex: "\"Beware of phishing emails asking for your personal details.\"" },
-      { term: "To Call for Action", icon: "🙋", def: "Encourage immediate action — sign up, buy, or join.", ex: "\"Register today for our webinar and get a free e-book!\"" },
-      { term: "To Persuade",        icon: "💡", def: "Change minds or influence decisions using emotional or logical appeals.", ex: "\"Switch to eco-friendly products today to help protect the environment.\"" },
+    group:"📣 Purposes of Social Media Posts", color:"purple",
+    items:[
+      {term:"To Inform",icon:"ℹ️",def:"Share facts or knowledge clearly. Answers What? When? Where? Why?",ex:'"Our new opening hours are from 9 AM to 5 PM starting tomorrow."'},
+      {term:"To Advertise",icon:"🛒",def:"Promote a product or service. Highlights features, discounts, or benefits.",ex:'"Buy one, get one free! Limited offer on our skincare range."'},
+      {term:"To Announce",icon:"📢",def:"Share important updates — new hires, launches, or events.",ex:'"We are thrilled to announce the launch of our new mobile app next week!"'},
+      {term:"To Warn",icon:"⚠️",def:"Alert the audience about potential risks or dangers.",ex:'"Beware of phishing emails asking for your personal details."'},
+      {term:"To Call for Action",icon:"🙋",def:"Encourage immediate action — sign up, buy, or join.",ex:'"Register today for our webinar and get a free e-book!"'},
+      {term:"To Persuade",icon:"💡",def:"Change minds or influence decisions using emotional or logical appeals.",ex:'"Switch to eco-friendly products today to help protect the environment."'},
     ]
   },
   {
-    group: "📋 7 Types of Announcements", color: "indigo",
-    items: [
-      { term: "Product Launch",               abbr: "PL", icon: "🚀", def: "Announces a new product or service available for the first time.", ex: "\"Totally new, totally you. The iPhone 20 — available now at Apple Stores worldwide.\"" },
-      { term: "Company News",                 abbr: "CN", icon: "🏢", def: "Shares internal updates, policy changes, or general business news.", ex: "\"Office hours are changing during Ramadan. Please check our updated schedule.\"" },
-      { term: "Upcoming Event",               abbr: "UE", icon: "📅", def: "Informs the audience about an event that will happen in the future.", ex: "\"What's up? Come see at the Tech Festival — this Friday, 4–9 PM!\"" },
-      { term: "Sales & Promotions",           abbr: "SP", icon: "🏷️", def: "Highlights discounts, offers, or limited-time deals to drive purchases.", ex: "\"Bring a friend. Buy one meal, get one free. This weekend only!\"" },
-      { term: "Milestones & Achievements",    abbr: "MA", icon: "🏆", def: "Celebrates a significant accomplishment or landmark for the organisation.", ex: "\"Party with us! City Center is 50 years old and we're celebrating all week!\"" },
-      { term: "Partnerships & Collaborations",abbr: "PC", icon: "🤝", def: "Announces a new relationship or joint venture between two organisations.", ex: "\"HSBC & Amazon now work together for you — easier payments, better rewards.\"" },
-      { term: "Hiring Notices",               abbr: "HN", icon: "💼", def: "Advertises job openings or calls for applications within the organisation.", ex: "\"Jobs, jobs, jobs! Visit Careers For You today and find your perfect role.\"" },
+    group:"📋 7 Types of Announcements", color:"indigo",
+    items:[
+      {term:"Product Launch",abbr:"PL",icon:"🚀",def:"Announces a new product or service available for the first time.",ex:'"Totally new, totally you. The iPhone 20 — available now at Apple Stores worldwide."'},
+      {term:"Company News",abbr:"CN",icon:"🏢",def:"Shares internal updates, policy changes, or general business news.",ex:'"Office hours are changing during Ramadan. Please check our updated schedule."'},
+      {term:"Upcoming Event",abbr:"UE",icon:"📅",def:"Informs the audience about an event that will happen in the future.",ex:'"What\'s up? Come see at the Tech Festival — this Friday, 4–9 PM!"'},
+      {term:"Sales & Promotions",abbr:"SP",icon:"🏷️",def:"Highlights discounts, offers, or limited-time deals to drive purchases.",ex:'"Bring a friend. Buy one meal, get one free. This weekend only!"'},
+      {term:"Milestones & Achievements",abbr:"MA",icon:"🏆",def:"Celebrates a significant accomplishment or landmark for the organisation.",ex:'"Party with us! City Center is 50 years old and we\'re celebrating all week!"'},
+      {term:"Partnerships & Collaborations",abbr:"PC",icon:"🤝",def:"Announces a new relationship or joint venture between two organisations.",ex:'"HSBC & Amazon now work together for you — easier payments, better rewards."'},
+      {term:"Hiring Notices",abbr:"HN",icon:"💼",def:"Advertises job openings or calls for applications within the organisation.",ex:'"Jobs, jobs, jobs! Visit Careers For You today and find your perfect role."'},
     ]
   },
   {
-    group: "🪝 Hooks — Engaging Opening Lines", color: "cyan",
-    items: [
-      { term: "What is a Hook?",                    icon: "🎣", def: "A hook is the first sentence of a post designed to grab the reader's attention immediately.", ex: "\"Totally new, totally you.\" — far more engaging than \"We have a new product.\"" },
-      { term: "Hook for Product Launch",             icon: "🚀", def: "Tease the product's novelty. Use short, punchy sentences.", ex: "\"Totally new, totally you. The iPhone 20.\"" },
-      { term: "Hook for Upcoming Event",             icon: "📅", def: "Create curiosity or excitement. Use questions or energy.", ex: "\"What's up? Come see at the Tech Festival.\"" },
-      { term: "Hook for Sales & Promotions",         icon: "🏷️", def: "Lead with the offer. Make the benefit immediately obvious.", ex: "\"Bring a friend. Buy one meal, get one free.\"" },
-      { term: "Hook for Milestones & Achievements",  icon: "🏆", def: "Invite the audience to share the celebration. Use inclusive language.", ex: "\"Party with us! City Center is 50 years old!\"" },
-      { term: "Hook for Partnerships",               icon: "🤝", def: "Lead with both names and the benefit to the audience.", ex: "\"HSBC & Amazon now work together for you.\"" },
-      { term: "Hook for Hiring Notices",             icon: "💼", def: "Create urgency and excitement. Repetition and action words work well.", ex: "\"Jobs, jobs, jobs! Visit Careers For You today.\"" },
-      { term: "Hook for Company News",               icon: "🏢", def: "Be clear and direct. Audiences need to know this is important.", ex: "\"Office hours are changing during Ramadan.\"" },
+    group:"🪝 Hooks — Engaging Opening Lines", color:"cyan",
+    items:[
+      {term:"What is a Hook?",icon:"🎣",def:"A hook is the first sentence of a post designed to grab the reader's attention immediately. A good hook makes people want to keep reading.",ex:'"Totally new, totally you." — far more engaging than "We have a new product."'},
+      {term:"Hook for Product Launch",icon:"🚀",def:"Tease the product's novelty. Use short, punchy sentences.",ex:'"Totally new, totally you. The iPhone 20."'},
+      {term:"Hook for Upcoming Event",icon:"📅",def:"Create curiosity or excitement. Use questions or energy.",ex:'"What\'s up? Come see at the Tech Festival."'},
+      {term:"Hook for Sales & Promotions",icon:"🏷️",def:"Lead with the offer. Make the benefit immediately obvious.",ex:'"Bring a friend. Buy one meal, get one free."'},
+      {term:"Hook for Milestones & Achievements",icon:"🏆",def:"Invite the audience to share the celebration. Use inclusive language.",ex:'"Party with us! City Center is 50 years old!"'},
+      {term:"Hook for Partnerships",icon:"🤝",def:"Lead with both names and the benefit to the audience.",ex:'"HSBC & Amazon now work together for you."'},
+      {term:"Hook for Hiring Notices",icon:"💼",def:"Create urgency and excitement. Repetition and action words work well.",ex:'"Jobs, jobs, jobs! Visit Careers For You today."'},
+      {term:"Hook for Company News",icon:"🏢",def:"Be clear and direct. Audiences need to know this is important.",ex:'"Office hours are changing during Ramadan."'},
     ]
   },
   {
-    group: "🎭 Rhetorical Appeals", color: "teal",
-    items: [
-      { term: "Logos", icon: "📊", def: "Logic, data, and facts. Use numbers, statistics, and specific figures. Look for: percentages, times, quantities, research results.", ex: "\"Studies show that 90% of people who exercise daily experience improved mental health.\"" },
-      { term: "Ethos", icon: "🏅", def: "Credibility and trust. The writer shows expertise, qualifications, or authority. Look for: job titles, years of experience, certifications.", ex: "\"As a certified nutritionist with 10 years' experience, I recommend more vegetables in your diet.\"" },
-      { term: "Pathos",icon: "❤️", def: "Emotion and feelings. Connects with the audience's heart — joy, fear, sympathy. Look for: emotional language, personal stories, values.", ex: "\"Think of the joy a rescued pet will bring into your home. Adopt today and save a life.\"" },
+    group:"🎭 Rhetorical Appeals", color:"teal",
+    items:[
+      {term:"Logos",icon:"📊",def:"Logic, data, and facts. Use numbers, statistics, and specific figures. Look for: percentages, times, quantities, research results.",ex:'"Studies show that 90% of people who exercise daily experience improved mental health."'},
+      {term:"Ethos",icon:"🏅",def:"Credibility and trust. The writer shows expertise, qualifications, or authority. Look for: job titles, years of experience, certifications.",ex:'"As a certified nutritionist with 10 years\' experience, I recommend more vegetables in your diet."'},
+      {term:"Pathos",icon:"❤️",def:"Emotion and feelings. Connects with the audience's heart — joy, fear, sympathy. Look for: emotional language, personal stories, values.",ex:'"Think of the joy a rescued pet will bring into your home. Adopt today and save a life."'},
     ]
   },
   {
-    group: "🔍 Key Elements of a Post", color: "orange",
-    items: [
-      { term: "Writer",            icon: "✍️", def: "The person or organization creating the post.", ex: "\"I am launching a 30-day fitness challenge\" → Writer is a fitness coach." },
-      { term: "Audience",          icon: "👥", def: "The specific group the post is directed towards.", ex: "\"Attention all fitness enthusiasts!\" → Audience = fitness lovers." },
-      { term: "Message",           icon: "💬", def: "The main information or ideas being shared.", ex: "\"Our new app is available for download\" → the core message." },
-      { term: "Purpose",           icon: "🎯", def: "The goal or reason behind the post.", ex: "\"Sign up now\" → Purpose = Call for Action." },
-      { term: "Context & Culture", icon: "🌍", def: "Background, trends, or societal factors influencing the post.", ex: "\"During the holidays\" → The time and setting shape the post's meaning." },
+    group:"🔍 Key Elements of a Post", color:"orange",
+    items:[
+      {term:"Writer",icon:"✍️",def:"The person or organization creating the post.",ex:'"I am launching a 30-day fitness challenge" → Writer is a fitness coach.'},
+      {term:"Audience",icon:"👥",def:"The specific group the post is directed towards.",ex:'"Attention all fitness enthusiasts!" → Audience = fitness lovers.'},
+      {term:"Message",icon:"💬",def:"The main information or ideas being shared.",ex:'"Our new app is available for download" → the core message.'},
+      {term:"Purpose",icon:"🎯",def:"The goal or reason behind the post.",ex:'"Sign up now" → Purpose = Call for Action.'},
+      {term:"Context & Culture",icon:"🌍",def:"Background, trends, or societal factors influencing the post.",ex:'"During the holidays" → The time and setting shape the post\'s meaning.'},
     ]
   },
   {
-    group: "✅ Features of a Good Post", color: "pink",
-    items: [
-      { term: "Clarity",         icon: "🔍", def: "Easy to understand. Avoid complex language or jargon.", ex: "\"Our store is closed on Friday for maintenance.\"" },
-      { term: "Conciseness",     icon: "✂️", def: "Brief and to the point. No unnecessary words.", ex: "\"50% off all items. Sale ends Sunday.\"" },
-      { term: "Professionalism", icon: "👔", def: "Reflects the tone of the brand. Accurate and respectful.", ex: "\"We value your privacy and will never ask for your password.\"" },
-      { term: "Engagement",      icon: "🔥", def: "Grabs attention through a hook, humour, a question, or a call to action.", ex: "\"What's your favourite feature of our new app? Let us know!\"" },
-      { term: "Structure",       icon: "🏗️", def: "Well-organized with the main point clear from the beginning.", ex: "\"Join us for our annual fundraiser on Saturday, October 1st, at 5 PM.\"" },
+    group:"✅ Features of a Good Post", color:"pink",
+    items:[
+      {term:"Clarity",icon:"🔍",def:"Easy to understand. Avoid complex language or jargon.",ex:'"Our store is closed on Friday for maintenance."'},
+      {term:"Conciseness",icon:"✂️",def:"Brief and to the point. No unnecessary words.",ex:'"50% off all items. Sale ends Sunday."'},
+      {term:"Professionalism",icon:"👔",def:"Reflects the tone of the brand. Accurate and respectful.",ex:'"We value your privacy and will never ask for your password."'},
+      {term:"Engagement",icon:"🔥",def:"Grabs attention through a hook, humour, a question, or a call to action.",ex:'"What\'s your favourite feature of our new app? Let us know!"'},
+      {term:"Structure",icon:"🏗️",def:"Well-organized with the main point clear from the beginning.",ex:'"Join us for our annual fundraiser on Saturday, October 1st, at 5 PM."'},
     ]
   }
 ];
 
 const questions = [
-  { cat:"Announcement Type", q:'"The university wants to find more qualified teaching staff. Apply now at hct.ac.ae/careers"', opts:["Product Launch","Hiring Notice","Company News","Milestones & Achievements"], ans:1 },
-  { cat:"Announcement Type", q:'"Baskin Robbins introduces 5 brand-new ice cream flavours this summer. Try them all!"', opts:["Sales & Promotions","Milestones & Achievements","Product Launch","Upcoming Event"], ans:2 },
-  { cat:"Announcement Type", q:'"McDonald\'s sold 1 billion hamburgers worldwide. Thank you for being part of the journey!"', opts:["Company News","Milestones & Achievements","Product Launch","Partnerships & Collaborations"], ans:1 },
-  { cat:"Announcement Type", q:'"Starbucks and HCT will work together to bring premium coffee to all 17 campuses."', opts:["Company News","Upcoming Event","Product Launch","Partnerships & Collaborations"], ans:3 },
-  { cat:"Announcement Type", q:'"The company has a new holiday policy starting January 1st. Read the full update on our portal."', opts:["Hiring Notice","Company News","Upcoming Event","Milestones & Achievements"], ans:1 },
-  { cat:"Announcement Type", q:'"The city will hold activities for Children\'s Day this Saturday in Corniche Park, 9 AM – 6 PM."', opts:["Product Launch","Sales & Promotions","Upcoming Event","Company News"], ans:2 },
-  { cat:"Announcement Type", q:'"KFC will start a special family meal deal this weekend. Get 2 meals + 2 drinks for only AED 49."', opts:["Product Launch","Sales & Promotions","Company News","Hiring Notice"], ans:1 },
-  { cat:"Hooks", q:'Which hook best fits a Product Launch announcement?', opts:['"Jobs, jobs, jobs! Visit us today."','"Totally new, totally you. The iPhone 20."','"Party with us! We\'re 50 years old!"','"Office hours are changing this month."'], ans:1 },
-  { cat:"Hooks", q:'Which hook best fits a Milestones & Achievements announcement?', opts:['"What\'s up? Come see at the Tech Festival."','"Bring a friend. Buy one, get one free."','"Party with us! City Center is 50 years old!"','"HSBC & Amazon now work together for you."'], ans:2 },
-  { cat:"Hooks", q:'Which hook best fits a Partnerships & Collaborations announcement?', opts:['"Jobs, jobs, jobs! Visit Careers For You today."','"Totally new, totally you."','"HSBC & Amazon now work together for you."','"Office hours are changing during Ramadan."'], ans:2 },
-  { cat:"Hooks", q:'Which hook best fits a Hiring Notice?', opts:['"Bring a friend. Buy one meal, get one free."','"What\'s up? Come see at the Tech Festival."','"Party with us! We\'re celebrating!"','"Jobs, jobs, jobs! Visit Careers For You today."'], ans:3 },
-  { cat:"Hooks", q:'Which hook best fits a Sales & Promotions announcement?', opts:['"Totally new, totally you. The iPhone 20."','"Bring a friend. Buy one meal, get one free."','"Office hours are changing during Ramadan."','"HSBC & Amazon now work together."'], ans:1 },
-  { cat:"Purpose", q:'"Don\'t miss our biggest sale of the year! Shop now and save up to 50%!"', opts:["To inform","To advertise","To warn","To announce"], ans:1 },
-  { cat:"Purpose", q:'"URGENT: A hurricane is approaching the coast. Stay indoors and follow safety guidelines."', opts:["To advertise","To warn","To announce","To persuade"], ans:1 },
-  { cat:"Purpose", q:'"Sign the petition to stop deforestation! Together, we can make a difference!"', opts:["To advertise","To announce","To call for action","To inform"], ans:2 },
-  { cat:"Purpose", q:'"Our team just won the National Science Competition! We are incredibly proud of their hard work."', opts:["To persuade","To warn","To call for action","To announce"], ans:3 },
-  { cat:"Purpose", q:'"Make sure to update your passwords regularly to avoid data breaches."', opts:["To advertise","To warn","To announce","To call for action"], ans:1 },
-  { cat:"Rhetorical Appeal", q:'"Imagine how good you\'ll feel when you make eco-friendly choices. Every action helps protect the planet!"', opts:["Logos","Ethos","Pathos"], ans:2 },
-  { cat:"Rhetorical Appeal", q:'"Our experts are dedicated to helping you achieve your fitness goals with personalized, professional guidance."', opts:["Logos","Ethos","Pathos"], ans:1 },
-  { cat:"Rhetorical Appeal", q:'"Scientific studies prove that regular exercise can boost both mental and physical health."', opts:["Logos","Ethos","Pathos"], ans:0 },
-  { cat:"Rhetorical Appeal", q:'"As a licensed financial advisor with 15 years of experience, I can help you make smarter investments."', opts:["Logos","Ethos","Pathos"], ans:1 },
-  { cat:"Rhetorical Appeal", q:'"Research shows that people who walk 30 minutes a day reduce their risk of heart disease by 50%."', opts:["Logos","Ethos","Pathos"], ans:0 },
-  { cat:"Post Elements", q:'"Dear customers, thank you for supporting our brand." — \'Dear customers\' identifies the:', opts:["The Writer","The Audience","The Message","The Context"], ans:1 },
-  { cat:"Post Elements", q:'"As a project manager at GreenTech Solutions, I am proud of our sustainability initiatives." — What does this phrase indicate?', opts:["The Message","The Context","The Writer","The Audience"], ans:2 },
-  { cat:"Post Elements", q:'"After 5 years with TechCorp, I\'m excited to announce my new role." — \'After 5 years with TechCorp\' indicates:', opts:["The Message","The Context","The Purpose","The Audience"], ans:1 },
-  { cat:"Post Quality", q:'"Hey everyone, you should totally check out our store. We have some cool stuff." — Main problem?', opts:["Lack of clarity","Lack of conciseness","Lack of professionalism","Lack of visual aids"], ans:2 },
-  { cat:"Post Quality", q:'"Our sale is on now! Shop now for incredible deals!" — Key problem?', opts:["Lack of clarity","Lack of engagement","Lack of structure","Lack of professionalism"], ans:0 },
-  { cat:"Post Quality", q:'"Get 20% off all items tomorrow. Join us for live music. We\'re also launching a new product!" — What\'s wrong?', opts:["Lack of professionalism","Lack of engagement","Lack of clarity","Lack of structure"], ans:3 },
+  {cat:"Announcement Type",q:'"The university wants to find more qualified teaching staff. Apply now at hct.ac.ae/careers"',opts:["Product Launch","Hiring Notice","Company News","Milestones & Achievements"],ans:1},
+  {cat:"Announcement Type",q:'"Baskin Robbins introduces 5 brand-new ice cream flavours this summer. Try them all!"',opts:["Sales & Promotions","Milestones & Achievements","Product Launch","Upcoming Event"],ans:2},
+  {cat:"Announcement Type",q:'"McDonald\'s sold 1 billion hamburgers worldwide. Thank you for being part of the journey!"',opts:["Company News","Milestones & Achievements","Product Launch","Partnerships & Collaborations"],ans:1},
+  {cat:"Announcement Type",q:'"Starbucks and HCT will work together to bring premium coffee to all 17 campuses."',opts:["Company News","Upcoming Event","Product Launch","Partnerships & Collaborations"],ans:3},
+  {cat:"Announcement Type",q:'"The company has a new holiday policy starting January 1st. Read the full update on our portal."',opts:["Hiring Notice","Company News","Upcoming Event","Milestones & Achievements"],ans:1},
+  {cat:"Announcement Type",q:'"The city will hold activities for Children\'s Day this Saturday in Corniche Park, 9 AM – 6 PM."',opts:["Product Launch","Sales & Promotions","Upcoming Event","Company News"],ans:2},
+  {cat:"Announcement Type",q:'"KFC will start a special family meal deal this weekend. Get 2 meals + 2 drinks for only AED 49."',opts:["Product Launch","Sales & Promotions","Company News","Hiring Notice"],ans:1},
+  {cat:"Hooks",q:"Which hook best fits a Product Launch announcement?",opts:['"Jobs, jobs, jobs! Visit us today."','"Totally new, totally you. The iPhone 20."','"Party with us! We\'re 50 years old!"','"Office hours are changing this month."'],ans:1},
+  {cat:"Hooks",q:"Which hook best fits a Milestones & Achievements announcement?",opts:['"What\'s up? Come see at the Tech Festival."','"Bring a friend. Buy one, get one free."','"Party with us! City Center is 50 years old!"','"HSBC & Amazon now work together for you."'],ans:2},
+  {cat:"Hooks",q:"Which hook best fits a Partnerships & Collaborations announcement?",opts:['"Jobs, jobs, jobs! Visit Careers For You today."','"Totally new, totally you."','"HSBC & Amazon now work together for you."','"Office hours are changing during Ramadan."'],ans:2},
+  {cat:"Hooks",q:"Which hook best fits a Hiring Notice?",opts:['"Bring a friend. Buy one meal, get one free."','"What\'s up? Come see at the Tech Festival."','"Party with us! We\'re celebrating!"','"Jobs, jobs, jobs! Visit Careers For You today."'],ans:3},
+  {cat:"Hooks",q:"Which hook best fits a Sales & Promotions announcement?",opts:['"Totally new, totally you. The iPhone 20."','"Bring a friend. Buy one meal, get one free."','"Office hours are changing during Ramadan."','"HSBC & Amazon now work together."'],ans:1},
+  {cat:"Purpose",q:'"Don\'t miss our biggest sale of the year! Shop now and save up to 50%!"',opts:["To inform","To advertise","To warn","To announce"],ans:1},
+  {cat:"Purpose",q:'"URGENT: A hurricane is approaching the coast. Stay indoors and follow safety guidelines."',opts:["To advertise","To warn","To announce","To persuade"],ans:1},
+  {cat:"Purpose",q:'"Sign the petition to stop deforestation! Together, we can make a difference!"',opts:["To advertise","To announce","To call for action","To inform"],ans:2},
+  {cat:"Purpose",q:'"Our team just won the National Science Competition! We are incredibly proud of their hard work."',opts:["To persuade","To warn","To call for action","To announce"],ans:3},
+  {cat:"Purpose",q:'"Make sure to update your passwords regularly to avoid data breaches."',opts:["To advertise","To warn","To announce","To call for action"],ans:1},
+  {cat:"Rhetorical Appeal",q:'"Imagine how good you\'ll feel when you make eco-friendly choices. Every action helps protect the planet!"',opts:["Logos","Ethos","Pathos"],ans:2},
+  {cat:"Rhetorical Appeal",q:'"Our experts are dedicated to helping you achieve your fitness goals with personalized, professional guidance."',opts:["Logos","Ethos","Pathos"],ans:1},
+  {cat:"Rhetorical Appeal",q:'"Scientific studies prove that regular exercise can boost both mental and physical health."',opts:["Logos","Ethos","Pathos"],ans:0},
+  {cat:"Rhetorical Appeal",q:'"As a licensed financial advisor with 15 years of experience, I can help you make smarter investments."',opts:["Logos","Ethos","Pathos"],ans:1},
+  {cat:"Rhetorical Appeal",q:'"Research shows that people who walk 30 minutes a day reduce their risk of heart disease by 50%."',opts:["Logos","Ethos","Pathos"],ans:0},
+  {cat:"Post Elements",q:"\"Dear customers, thank you for supporting our brand.\" — 'Dear customers' identifies the:",opts:["The Writer","The Audience","The Message","The Context"],ans:1},
+  {cat:"Post Elements",q:'"As a project manager at GreenTech Solutions, I am proud of our sustainability initiatives." — What does this phrase indicate?',opts:["The Message","The Context","The Writer","The Audience"],ans:2},
+  {cat:"Post Elements",q:"\"After 5 years with TechCorp, I'm excited to announce my new role.\" — 'After 5 years with TechCorp' indicates:",opts:["The Message","The Context","The Purpose","The Audience"],ans:1},
+  {cat:"Post Quality",q:'"Hey everyone, you should totally check out our store. We have some cool stuff." — Main problem?',opts:["Lack of clarity","Lack of conciseness","Lack of professionalism","Lack of visual aids"],ans:2},
+  {cat:"Post Quality",q:'"Our sale is on now! Shop now for incredible deals!" — Key problem?',opts:["Lack of clarity","Lack of engagement","Lack of structure","Lack of professionalism"],ans:0},
+  {cat:"Post Quality",q:'"Get 20% off all items tomorrow. Join us for live music. We\'re also launching a new product!" — What\'s wrong?',opts:["Lack of professionalism","Lack of engagement","Lack of clarity","Lack of structure"],ans:3},
 ];
 
 const scenarios = [
-  { id:1, emoji:"📡", title:"IT Services Alert", type:"Company News (CN)", appeal:"Logos (logic + facts)", writer:"IT Services Department", audience:"All campus users", purpose:"To inform & reduce disruption", context:"Sunday, 10:00–12:00 – planned campus network maintenance. Over 2,000 campus users will be affected.", tip:"Logos = numbers & facts. Include exact times, duration (2 hours), number of users affected, and a clear alternative. No emotions — just precise information.", model:"IT Services notice: Campus Wi-Fi will be offline Sunday 10:00–12:00 for scheduled maintenance. Over 2,000 users will be affected during this 2-hour window. To stay connected, use mobile data or visit the Library PCs. Service will return by 12:00. Thank you for your patience.", color:"blue" },
-  { id:2, emoji:"🌱", title:"Environmental Campaign", type:"Upcoming Event (UE)", appeal:"Ethos (credibility + trust)", writer:"HCT Environmental Club", audience:"Students and staff on campus", purpose:"To persuade & call for action", context:"World Environment Day – the club has organised a campus clean-up event with 3 faculty supervisors and partnership with the UAE Ministry of Climate Change.", tip:"Ethos = credibility. Mention the club's faculty support, the Ministry partnership, and the club's track record. Establish authority before making your appeal.", model:null, color:"teal" },
-  { id:3, emoji:"🏆", title:"HCT Competition Win", type:"Milestones & Achievements (MA)", appeal:"Pathos (emotion + pride)", writer:"HCT Student Council", audience:"All HCT students and staff", purpose:"To announce & celebrate", context:"HCT Abu Dhabi Men's College won 1st place at the UAE National Robotics Championship, beating 24 other colleges.", tip:"Pathos = emotion. Use pride, celebration, and inclusive language ('we', 'our'). A strong hook that invites everyone to share the moment works perfectly here.", model:null, color:"orange" },
-  { id:4, emoji:"⚠️", title:"Campus Safety Warning", type:"Company News (CN)", appeal:"Logos (clear facts + statistics)", writer:"HCT Security Office", audience:"All campus community members", purpose:"To warn", context:"In the past 2 weeks, 15 students reported receiving phishing emails asking for login credentials. 3 accounts were compromised.", tip:"Logos = numbers & facts. Use the statistics (15 reports, 3 accounts, 2 weeks) to show the scale of the threat. Add a specific action step. No emotional language — factual and clear.", model:null, color:"pink" },
-  { id:5, emoji:"🤝", title:"New Campus Partnership", type:"Partnerships & Collaborations (PC)", appeal:"Ethos (credibility + authority)", writer:"HCT Communications Office", audience:"Students, staff, and industry professionals", purpose:"To announce", context:"HCT has signed a 3-year MOU with Microsoft UAE to provide students with free Azure cloud certifications and internship opportunities at Microsoft offices.", tip:"Ethos = credibility. Lead with both organisations' names and their authority. Mention the specific benefit (free certifications, internships) and the formal agreement (MOU, 3-year). Use a punchy hook.", model:null, color:"indigo" },
-  { id:6, emoji:"💼", title:"Faculty Job Opening", type:"Hiring Notice (HN)", appeal:"Logos (clear, factual details)", writer:"HCT Human Resources", audience:"Qualified English language professionals", purpose:"To inform & call for action", context:"HCT is hiring 5 new English language instructors across UAE campuses. Deadline: March 31st. Minimum requirement: Master's degree + 3 years' teaching experience.", tip:"Logos = precise facts. Include the number of positions (5), qualifications required, deadline (March 31st), and a clear call to action. Hook with energy — make it exciting to apply!", model:null, color:"purple" },
+  {id:1,emoji:"📡",title:"IT Services Alert",type:"Company News (CN)",appeal:"Logos (logic + facts)",writer:"IT Services Department",audience:"All campus users",purpose:"To inform & reduce disruption",context:"Sunday, 10:00–12:00 – planned campus network maintenance. Over 2,000 campus users will be affected.",tip:"Logos = numbers & facts. Include exact times, duration (2 hours), number of users affected, and a clear alternative. No emotions — just precise information.",model:"IT Services notice: Campus Wi-Fi will be offline Sunday 10:00–12:00 for scheduled maintenance. Over 2,000 users will be affected during this 2-hour window. To stay connected, use mobile data or visit the Library PCs. Service will return by 12:00. Thank you for your patience.",color:"blue"},
+  {id:2,emoji:"🌱",title:"Environmental Campaign",type:"Upcoming Event (UE)",appeal:"Ethos (credibility + trust)",writer:"HCT Environmental Club",audience:"Students and staff on campus",purpose:"To persuade & call for action",context:"World Environment Day – the club has organised a campus clean-up event with 3 faculty supervisors and partnership with the UAE Ministry of Climate Change.",tip:"Ethos = credibility. Mention the club's faculty support, the Ministry partnership, and the club's track record. Establish authority before making your appeal.",model:null,color:"teal"},
+  {id:3,emoji:"🏆",title:"HCT Competition Win",type:"Milestones & Achievements (MA)",appeal:"Pathos (emotion + pride)",writer:"HCT Student Council",audience:"All HCT students and staff",purpose:"To announce & celebrate",context:"HCT Abu Dhabi Men's College won 1st place at the UAE National Robotics Championship, beating 24 other colleges.",tip:"Pathos = emotion. Use pride, celebration, and inclusive language ('we', 'our'). A strong hook that invites everyone to share the moment works perfectly here.",model:null,color:"orange"},
+  {id:4,emoji:"⚠️",title:"Campus Safety Warning",type:"Company News (CN)",appeal:"Logos (clear facts + statistics)",writer:"HCT Security Office",audience:"All campus community members",purpose:"To warn",context:"In the past 2 weeks, 15 students reported receiving phishing emails asking for login credentials. 3 accounts were compromised.",tip:"Logos = numbers & facts. Use the statistics (15 reports, 3 accounts, 2 weeks) to show the scale of the threat. Add a specific action step. No emotional language — factual and clear.",model:null,color:"pink"},
+  {id:5,emoji:"🤝",title:"New Campus Partnership",type:"Partnerships & Collaborations (PC)",appeal:"Ethos (credibility + authority)",writer:"HCT Communications Office",audience:"Students, staff, and industry professionals",purpose:"To announce",context:"HCT has signed a 3-year MOU with Microsoft UAE to provide students with free Azure cloud certifications and internship opportunities at Microsoft offices.",tip:"Ethos = credibility. Lead with both organisations' names and their authority. Mention the specific benefit (free certifications, internships) and the formal agreement (MOU, 3-year). Use a punchy hook.",model:null,color:"indigo"},
+  {id:6,emoji:"💼",title:"Faculty Job Opening",type:"Hiring Notice (HN)",appeal:"Logos (clear, factual details)",writer:"HCT Human Resources",audience:"Qualified English language professionals",purpose:"To inform & call for action",context:"HCT is hiring 5 new English language instructors across UAE campuses. Deadline: March 31st. Minimum requirement: Master's degree + 3 years' teaching experience.",tip:"Logos = precise facts. Include the number of positions (5), qualifications required, deadline (March 31st), and a clear call to action. Hook with energy — make it exciting to apply!",model:null,color:"purple"},
 ];
 
-const C = {
-  purple:{ bg:"bg-purple-500", light:"bg-purple-50", border:"border-purple-200", text:"text-purple-700", badge:"bg-purple-100 text-purple-700", btn:"bg-purple-500 hover:bg-purple-600", ring:"ring-purple-400" },
-  indigo:{ bg:"bg-indigo-500", light:"bg-indigo-50", border:"border-indigo-200", text:"text-indigo-700", badge:"bg-indigo-100 text-indigo-700", btn:"bg-indigo-500 hover:bg-indigo-600", ring:"ring-indigo-400" },
-  cyan:  { bg:"bg-cyan-500",   light:"bg-cyan-50",   border:"border-cyan-200",   text:"text-cyan-700",   badge:"bg-cyan-100 text-cyan-700",   btn:"bg-cyan-500 hover:bg-cyan-600",   ring:"ring-cyan-400" },
-  teal:  { bg:"bg-teal-500",   light:"bg-teal-50",   border:"border-teal-200",   text:"text-teal-700",   badge:"bg-teal-100 text-teal-700",   btn:"bg-teal-500 hover:bg-teal-600",   ring:"ring-teal-400" },
-  orange:{ bg:"bg-orange-500", light:"bg-orange-50", border:"border-orange-200", text:"text-orange-700", badge:"bg-orange-100 text-orange-700", btn:"bg-orange-500 hover:bg-orange-600", ring:"ring-orange-400" },
-  pink:  { bg:"bg-pink-500",   light:"bg-pink-50",   border:"border-pink-200",   text:"text-pink-700",   badge:"bg-pink-100 text-pink-700",   btn:"bg-pink-500 hover:bg-pink-600",   ring:"ring-pink-400" },
-  blue:  { bg:"bg-blue-500",   light:"bg-blue-50",   border:"border-blue-200",   text:"text-blue-700",   badge:"bg-blue-100 text-blue-700",   btn:"bg-blue-500 hover:bg-blue-600",   ring:"ring-blue-400" },
+/* ── COLOUR PALETTE ───────────────────────────────────────────────── */
+const PAL = {
+  purple:{ bg:"#7c3aed", light:"#f5f3ff", border:"#ddd6fe", text:"#6d28d9", badgeBg:"#ede9fe", badgeText:"#6d28d9", btn:"#7c3aed", btnH:"#6d28d9" },
+  indigo:{ bg:"#4338ca", light:"#eef2ff", border:"#c7d2fe", text:"#4338ca", badgeBg:"#e0e7ff", badgeText:"#4338ca", btn:"#4338ca", btnH:"#3730a3" },
+  cyan:  { bg:"#0891b2", light:"#ecfeff", border:"#a5f3fc", text:"#0e7490", badgeBg:"#cffafe", badgeText:"#0e7490", btn:"#0891b2", btnH:"#0e7490" },
+  teal:  { bg:"#0d9488", light:"#f0fdfa", border:"#99f6e4", text:"#0f766e", badgeBg:"#ccfbf1", badgeText:"#0f766e", btn:"#0d9488", btnH:"#0f766e" },
+  orange:{ bg:"#ea580c", light:"#fff7ed", border:"#fed7aa", text:"#c2410c", badgeBg:"#ffedd5", badgeText:"#c2410c", btn:"#ea580c", btnH:"#c2410c" },
+  pink:  { bg:"#db2777", light:"#fdf2f8", border:"#fbcfe8", text:"#be185d", badgeBg:"#fce7f3", badgeText:"#be185d", btn:"#db2777", btnH:"#be185d" },
+  blue:  { bg:"#2563eb", light:"#eff6ff", border:"#bfdbfe", text:"#1d4ed8", badgeBg:"#dbeafe", badgeText:"#1d4ed8", btn:"#2563eb", btnH:"#1d4ed8" },
 };
-const catColors = { "Announcement Type":"indigo", "Hooks":"cyan", "Purpose":"purple", "Rhetorical Appeal":"teal", "Post Elements":"orange", "Post Quality":"pink" };
+const catColor = {"Announcement Type":"indigo","Hooks":"cyan","Purpose":"purple","Rhetorical Appeal":"teal","Post Elements":"orange","Post Quality":"pink"};
 
-// ─── LEARN ────────────────────────────────────────────────────────────
+/* ── LEARN ─────────────────────────────────────────────────────────── */
 function LearnSection() {
   const [open, setOpen] = useState({});
-  const toggle = (g, i) => { const k=`${g}-${i}`; setOpen(p=>({...p,[k]:!p[k]})); };
+  const tog = (g,i) => setOpen(p => ({...p, [`${g}-${i}`]: !p[`${g}-${i}`]}));
   return (
-    <div className="space-y-6">
-      {concepts.map((group, gi) => {
-        const cl = C[group.color];
+    <div style={{display:"flex",flexDirection:"column",gap:"1.25rem"}}>
+      {concepts.map((grp, gi) => {
+        const p = PAL[grp.color];
         return (
-          <div key={gi} className={`rounded-2xl border-2 ${cl.border} overflow-hidden shadow-sm`}>
-            <div className={`${cl.bg} text-white px-5 py-3 font-bold text-lg`}>{group.group}</div>
-            <div className={`${cl.light} divide-y ${cl.border}`}>
-              {group.items.map((item, ii) => {
-                const isOpen = open[`${gi}-${ii}`];
-                return (
-                  <div key={ii}>
-                    <button onClick={()=>toggle(gi,ii)} className="w-full flex items-center justify-between px-5 py-3 text-left hover:bg-white" style={{background:'transparent'}}>
-                      <span className="font-semibold flex items-center gap-2">
-                        <span>{item.icon}</span>
-                        <span className={cl.text}>{item.term}</span>
-                        {item.abbr && <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${cl.badge}`}>{item.abbr}</span>}
-                      </span>
-                      <span className="text-gray-400 text-lg" style={{display:'inline-block',transition:'transform 0.2s',transform:isOpen?'rotate(90deg)':'rotate(0deg)'}}>›</span>
-                    </button>
-                    {isOpen && (
-                      <div className="px-5 pb-4 space-y-2">
-                        <p className="text-gray-700 text-sm">{item.def}</p>
-                        <div className={`text-xs italic px-3 py-2 rounded-lg ${cl.badge} border ${cl.border}`}>📌 {item.ex}</div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+          <div key={gi} style={{borderRadius:"1rem",border:`2px solid ${p.border}`,overflow:"hidden",boxShadow:"0 1px 4px rgba(0,0,0,0.06)"}}>
+            <div style={{background:p.bg,color:"white",padding:"0.75rem 1.25rem",fontWeight:700,fontSize:"1rem"}}>{grp.group}</div>
+            {grp.items.map((item, ii) => {
+              const isOpen = !!open[`${gi}-${ii}`];
+              return (
+                <div key={ii} style={{borderTop:ii>0?`1px solid ${p.border}`:"none",background:p.light}}>
+                  <button onClick={()=>tog(gi,ii)} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0.7rem 1.25rem",background:"transparent",border:"none",textAlign:"left"}}>
+                    <span style={{display:"flex",alignItems:"center",gap:"0.5rem",fontWeight:600,color:p.text}}>
+                      <span>{item.icon}</span>
+                      <span>{item.term}</span>
+                      {item.abbr && <span style={{fontSize:"0.7rem",fontWeight:700,padding:"0.1rem 0.5rem",borderRadius:"999px",background:p.badgeBg,color:p.badgeText}}>{item.abbr}</span>}
+                    </span>
+                    <span className="chevron" style={{transform:isOpen?"rotate(90deg)":"rotate(0deg)",color:"#9ca3af",fontSize:"1.2rem",transition:"transform 0.2s"}}>›</span>
+                  </button>
+                  {isOpen && (
+                    <div style={{padding:"0 1.25rem 0.9rem 1.25rem",display:"flex",flexDirection:"column",gap:"0.5rem"}}>
+                      <p style={{color:"#374151",fontSize:"0.875rem",margin:0}}>{item.def}</p>
+                      <div style={{fontSize:"0.75rem",fontStyle:"italic",padding:"0.5rem 0.75rem",borderRadius:"0.5rem",background:p.badgeBg,color:p.badgeText,border:`1px solid ${p.border}`}}>📌 {item.ex}</div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         );
       })}
-      <div className="rounded-2xl border-2 border-indigo-200 overflow-hidden shadow-sm">
-        <div className="bg-indigo-500 text-white px-5 py-3 font-bold text-lg">📊 Quick Reference — 7 Announcement Types</div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-indigo-50 text-indigo-700 font-bold">
-              <tr><th className="px-3 py-2 text-left">Abbr.</th><th className="px-3 py-2 text-left">Type</th><th className="px-3 py-2 text-left">Key Purpose</th></tr>
-            </thead>
-            <tbody className="divide-y divide-indigo-100">
-              {[["PL","Product Launch","New product or service available"],["CN","Company News","Policy, internal updates, changes"],["UE","Upcoming Event","Future event details"],["SP","Sales & Promotions","Discounts, deals, offers"],["MA","Milestones & Achievements","Celebrating success"],["PC","Partnerships & Collaborations","New joint ventures"],["HN","Hiring Notices","Job openings & applications"]].map(([a,t,p])=>(
-                <tr key={a}><td className="px-3 py-2 font-bold text-indigo-600">{a}</td><td className="px-3 py-2 text-gray-800">{t}</td><td className="px-3 py-2 text-gray-600">{p}</td></tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      {/* Quick Ref Table */}
+      <div style={{borderRadius:"1rem",border:"2px solid #c7d2fe",overflow:"hidden",boxShadow:"0 1px 4px rgba(0,0,0,0.06)"}}>
+        <div style={{background:"#4338ca",color:"white",padding:"0.75rem 1.25rem",fontWeight:700,fontSize:"1rem"}}>📊 Quick Reference — 7 Announcement Types</div>
+        <table style={{width:"100%",borderCollapse:"collapse",fontSize:"0.875rem"}}>
+          <thead style={{background:"#eef2ff"}}>
+            <tr>
+              <th style={{padding:"0.5rem 0.75rem",textAlign:"left",color:"#4338ca",fontWeight:700}}>Abbr.</th>
+              <th style={{padding:"0.5rem 0.75rem",textAlign:"left",color:"#4338ca",fontWeight:700}}>Type</th>
+              <th style={{padding:"0.5rem 0.75rem",textAlign:"left",color:"#4338ca",fontWeight:700}}>Key Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[["PL","Product Launch","New product or service available"],["CN","Company News","Policy, internal updates, changes"],["UE","Upcoming Event","Future event details"],["SP","Sales & Promotions","Discounts, deals, offers"],["MA","Milestones & Achievements","Celebrating success"],["PC","Partnerships & Collaborations","New joint ventures"],["HN","Hiring Notices","Job openings & applications"]].map(([a,t,d],i)=>(
+              <tr key={a} style={{borderTop:"1px solid #e0e7ff",background:i%2===0?"white":"#f5f7ff"}}>
+                <td style={{padding:"0.5rem 0.75rem",fontWeight:700,color:"#4338ca"}}>{a}</td>
+                <td style={{padding:"0.5rem 0.75rem",color:"#1f2937"}}>{t}</td>
+                <td style={{padding:"0.5rem 0.75rem",color:"#6b7280"}}>{d}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
 }
 
-// ─── PRACTICE ─────────────────────────────────────────────────────────
+/* ── PRACTICE ──────────────────────────────────────────────────────── */
 function PracticeSection() {
   const [pool] = useState(()=>[...questions].sort(()=>Math.random()-0.5).slice(0,18));
   const [idx, setIdx] = useState(0);
   const [sel, setSel] = useState(null);
   const [done, setDone] = useState(false);
-  const [history, setHistory] = useState([]);
+  const [hist, setHist] = useState([]);
 
   const q = pool[idx];
-  const cl = C[catColors[q?.cat]||"purple"];
+  const p = PAL[catColor[q?.cat]||"purple"];
+  const correct = sel === q?.ans;
 
   const next = () => {
-    setHistory(h=>[...h,{correct:sel===q.ans}]);
+    setHist(h=>[...h,{ok:sel===q.ans}]);
     if(idx+1>=pool.length) setDone(true);
     else { setIdx(i=>i+1); setSel(null); }
   };
-  const restart = () => { setIdx(0); setSel(null); setDone(false); setHistory([]); };
+  const restart = () => { setIdx(0); setSel(null); setDone(false); setHist([]); };
 
   if(done) {
-    const total = history.filter(h=>h.correct).length;
+    const total = hist.filter(h=>h.ok).length;
     const pct = Math.round((total/pool.length)*100);
     return (
-      <div className="text-center space-y-5 py-8">
-        <div className={`text-6xl font-black ${pct>=80?'text-teal-500':'text-orange-500'}`}>{pct}%</div>
-        <p className="text-2xl font-bold text-gray-700">{pct>=80?"🎉 Excellent work!":"💪 Keep practising!"}</p>
-        <p className="text-gray-500">You got {total} out of {pool.length} correct.</p>
-        <div className="flex flex-wrap gap-2 justify-center max-w-xs mx-auto">
-          {history.map((h,i)=><div key={i} className={`w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-xs ${h.correct?'bg-teal-400':'bg-red-400'}`}>{i+1}</div>)}
+      <div style={{textAlign:"center",padding:"2rem 0",display:"flex",flexDirection:"column",alignItems:"center",gap:"1rem"}}>
+        <div style={{fontSize:"3.5rem",fontWeight:900,color:pct>=80?"#14b8a6":"#f97316"}}>{pct}%</div>
+        <p style={{fontSize:"1.4rem",fontWeight:700,color:"#1f2937",margin:0}}>{pct>=80?"🎉 Excellent work!":"💪 Keep practising!"}</p>
+        <p style={{color:"#6b7280",margin:0}}>You got {total} out of {pool.length} correct.</p>
+        <div style={{display:"flex",flexWrap:"wrap",gap:"0.4rem",justifyContent:"center",maxWidth:"18rem"}}>
+          {hist.map((h,i)=><div key={i} style={{width:"2.2rem",height:"2.2rem",borderRadius:"50%",background:h.ok?"#4ade80":"#f87171",display:"flex",alignItems:"center",justifyContent:"center",color:"white",fontWeight:700,fontSize:"0.75rem"}}>{i+1}</div>)}
         </div>
-        <button onClick={restart} className="bg-purple-500 text-white font-bold px-8 py-3 rounded-xl">🔄 Try Again</button>
+        <button onClick={restart} style={{background:"#7c3aed",color:"white",fontWeight:700,padding:"0.75rem 2rem",borderRadius:"0.75rem",border:"none",fontSize:"1rem"}}>🔄 Try Again</button>
       </div>
     );
   }
+
   return (
-    <div className="space-y-5">
-      <div className="flex items-center justify-between text-sm text-gray-500">
-        <span className={`text-xs font-semibold px-3 py-1 rounded-full ${cl.badge}`}>{q.cat}</span>
-        <span>{idx+1} / {pool.length}</span>
+    <div style={{display:"flex",flexDirection:"column",gap:"1rem"}}>
+      {/* header */}
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+        <span style={{fontSize:"0.75rem",fontWeight:700,padding:"0.2rem 0.75rem",borderRadius:"999px",background:p.badgeBg,color:p.badgeText}}>{q.cat}</span>
+        <span style={{fontSize:"0.875rem",color:"#6b7280"}}>{idx+1} / {pool.length}</span>
       </div>
-      <div className="w-full bg-gray-200 rounded-full h-2">
-        <div className={`${cl.bg} h-2 rounded-full`} style={{width:`${(idx/pool.length)*100}%`,transition:'width 0.3s'}}/>
+      {/* progress */}
+      <div style={{background:"#e5e7eb",borderRadius:"999px",height:"0.5rem"}}>
+        <div style={{background:p.bg,height:"0.5rem",borderRadius:"999px",width:`${(idx/pool.length)*100}%`,transition:"width 0.3s"}}/>
       </div>
-      <div className={`${cl.light} border-2 ${cl.border} rounded-2xl p-5`}>
-        <p className="text-gray-800 font-medium text-base leading-relaxed">{q.q}</p>
+      {/* question */}
+      <div style={{background:p.light,border:`2px solid ${p.border}`,borderRadius:"1rem",padding:"1.1rem 1.25rem"}}>
+        <p style={{margin:0,fontWeight:500,color:"#1f2937",lineHeight:1.6}}>{q.q}</p>
       </div>
-      <div className="space-y-3">
+      {/* options */}
+      <div style={{display:"flex",flexDirection:"column",gap:"0.6rem"}}>
         {q.opts.map((opt,i)=>{
-          let style="border-2 border-gray-200 bg-white text-gray-700";
+          let bg="#ffffff",border="2px solid #e5e7eb",color="#374151";
           if(sel!==null){
-            if(i===q.ans) style="border-2 border-teal-400 bg-teal-50 text-teal-800 font-semibold";
-            else if(i===sel&&sel!==q.ans) style="border-2 border-red-400 bg-red-50 text-red-700";
-            else style="border-2 border-gray-200 bg-gray-50 text-gray-400";
+            if(i===q.ans){bg="#f0fdf4";border="2px solid #4ade80";color="#166534";}
+            else if(i===sel){bg="#fef2f2";border="2px solid #f87171";color="#991b1b";}
+            else{bg="#f9fafb";color="#9ca3af";}
           }
           return (
-            <button key={i} onClick={()=>{if(sel===null)setSel(i);}} className={`w-full text-left px-5 py-3 rounded-xl flex items-center gap-3 ${style}`}>
-              <span className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold flex-shrink-0">
+            <button key={i} onClick={()=>{if(sel===null)setSel(i);}} style={{width:"100%",textAlign:"left",padding:"0.75rem 1.1rem",borderRadius:"0.75rem",border,background:bg,color,display:"flex",alignItems:"center",gap:"0.75rem",fontWeight:500}}>
+              <span style={{width:"1.75rem",height:"1.75rem",borderRadius:"50%",background:"#f3f4f6",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"0.75rem",fontWeight:700,flexShrink:0}}>
                 {sel!==null?(i===q.ans?"✓":i===sel?"✗":String.fromCharCode(65+i)):String.fromCharCode(65+i)}
               </span>
               {opt}
@@ -258,19 +272,20 @@ function PracticeSection() {
           );
         })}
       </div>
-      {sel!==null&&(
-        <div className={`px-4 py-3 rounded-xl text-sm font-medium ${sel===q.ans?'bg-teal-50 border border-teal-300 text-teal-800':'bg-red-50 border border-red-300 text-red-800'}`}>
-          {sel===q.ans?"✅ Correct! Well done.": `❌ Not quite. The correct answer is: "${q.opts[q.ans]}"`}
+      {/* feedback */}
+      {sel!==null && (
+        <div style={{padding:"0.75rem 1rem",borderRadius:"0.75rem",background:correct?"#f0fdf4":"#fef2f2",border:correct?"1px solid #bbf7d0":"1px solid #fecaca",color:correct?"#166534":"#991b1b",fontWeight:500,fontSize:"0.875rem"}}>
+          {correct?"✅ Correct! Well done.": `❌ Not quite. The correct answer is: "${q.opts[q.ans]}"`}
         </div>
       )}
-      <button onClick={next} disabled={sel===null} className={`w-full py-3 rounded-xl font-bold text-white ${sel!==null?`${cl.btn}`:'bg-gray-300 cursor-not-allowed'}`}>
+      <button onClick={next} disabled={sel===null} style={{width:"100%",padding:"0.75rem",borderRadius:"0.75rem",fontWeight:700,color:"white",background:sel!==null?p.bg:"#d1d5db",border:"none",fontSize:"1rem",cursor:sel!==null?"pointer":"not-allowed"}}>
         {idx+1>=pool.length?"See Results →":"Next Question →"}
       </button>
     </div>
   );
 }
 
-// ─── CREATE ───────────────────────────────────────────────────────────
+/* ── CREATE ────────────────────────────────────────────────────────── */
 function CreateSection() {
   const [picked, setPicked] = useState(null);
   const [text, setText] = useState("");
@@ -278,14 +293,14 @@ function CreateSection() {
   const [feedback, setFeedback] = useState(null);
   const [showModel, setShowModel] = useState(false);
 
-  const wc = text.trim().split(/\s+/).filter(Boolean).length;
   const sc = scenarios.find(s=>s.id===picked);
-  const cl = sc?C[sc.color]:null;
+  const p = sc ? PAL[sc.color] : null;
+  const wc = text.trim().split(/\s+/).filter(Boolean).length;
 
   const evaluate = useCallback(async()=>{
     if(!sc||wc<10) return;
     setLoading(true); setFeedback(null);
-    const prompt=`You are an English language instructor at a UAE university. A student wrote a social media post based on this exam scenario:\n\nSCENARIO:\n- Announcement type: ${sc.type}\n- Rhetorical appeal: ${sc.appeal}\n- Writer: ${sc.writer}\n- Audience: ${sc.audience}\n- Purpose: ${sc.purpose}\n- Context: ${sc.context}\n\nSTUDENT'S POST (${wc} words):\n"${text.trim()}"\n\nEvaluate this post. It should:\n1. Match the announcement TYPE (${sc.type})\n2. Use the correct rhetorical appeal (${sc.appeal}) — for Logos: must include specific numbers/statistics from the context; for Ethos: must establish credibility; for Pathos: must use emotional language\n3. Have an engaging HOOK as the first sentence\n4. Be 50–60 words\n5. Address the correct audience\n\nRespond ONLY in this exact JSON format (no markdown, no backticks):\n{\n  "score": <0-100>,\n  "grade": "<Excellent|Good|Developing|Needs Improvement>",\n  "has_hook": <true|false>,\n  "hook_comment": "<one sentence about the hook>",\n  "announcement_type_correct": <true|false>,\n  "appeal_used": "<Logos|Ethos|Pathos|Unclear>",\n  "appeal_correct": <true|false>,\n  "appeal_comment": "<one sentence — if Logos, did they use numbers? if not, say what is missing>",\n  "word_count_ok": <true|false>,\n  "strengths": ["<point>", "<point>"],\n  "improvements": ["<point>", "<point>"],\n  "revised_example": "<improved version, 50-60 words, with a strong hook, correct appeal and announcement type>"\n}`;
+    const prompt = `You are an English language instructor at a UAE university. A student wrote a social media post based on this exam scenario:\n\nSCENARIO:\n- Announcement type: ${sc.type}\n- Rhetorical appeal: ${sc.appeal}\n- Writer: ${sc.writer}\n- Audience: ${sc.audience}\n- Purpose: ${sc.purpose}\n- Context: ${sc.context}\n\nSTUDENT POST (${wc} words): "${text.trim()}"\n\nEvaluate. The post should: match the announcement type, use the correct rhetorical appeal (Logos=must include specific numbers/stats from context; Ethos=establish credibility; Pathos=emotional language), have an engaging hook as the first sentence, be 50-60 words, address the correct audience.\n\nRespond ONLY in this JSON (no markdown):\n{"score":<0-100>,"grade":"<Excellent|Good|Developing|Needs Improvement>","has_hook":<true|false>,"hook_comment":"<one sentence>","announcement_type_correct":<true|false>,"appeal_used":"<Logos|Ethos|Pathos|Unclear>","appeal_correct":<true|false>,"appeal_comment":"<one sentence — for Logos: did they use numbers? if not, say what is missing>","word_count_ok":<true|false>,"strengths":["<point>","<point>"],"improvements":["<point>","<point>"],"revised_example":"<improved 50-60 word version with strong hook and correct appeal>"}`;
     try {
       const res = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]})});
       const data = await res.json();
@@ -296,114 +311,146 @@ function CreateSection() {
   },[sc,text,wc]);
 
   return (
-    <div className="space-y-5">
-      <p className="text-sm font-semibold text-gray-600">Choose a scenario to write about:</p>
-      <div className="grid grid-cols-2 gap-3">
+    <div style={{display:"flex",flexDirection:"column",gap:"1rem"}}>
+      <p style={{margin:0,fontSize:"0.875rem",fontWeight:600,color:"#4b5563"}}>Choose a scenario to write about:</p>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0.75rem"}}>
         {scenarios.map(s=>{
-          const c=C[s.color]; const sel=picked===s.id;
+          const sp=PAL[s.color]; const sel=picked===s.id;
+          const abbr = s.type.match(/\(([^)]+)\)/)?.[1]||"";
           return (
             <button key={s.id} onClick={()=>{setPicked(s.id);setText("");setFeedback(null);setShowModel(false);}}
-              className={`p-3 rounded-xl border-2 text-left ${sel?`${c.border} ${c.light}`:'border-gray-200 bg-white'}`}>
-              <div className="text-2xl mb-1">{s.emoji}</div>
-              <div className={`text-sm font-bold ${sel?c.text:'text-gray-700'}`}>{s.title}</div>
-              <div className={`text-xs mt-1 px-2 py-0.5 rounded-full inline-block ${sel?c.badge:'bg-gray-100 text-gray-500'}`}>{s.type.split('(')[1]?.replace(')','')}</div>
+              style={{padding:"0.75rem",borderRadius:"0.75rem",border:sel?`2px solid ${sp.border}`:"2px solid #e5e7eb",background:sel?sp.light:"white",textAlign:"left",boxShadow:sel?`0 0 0 2px ${sp.bg}33`:"none"}}>
+              <div style={{fontSize:"1.5rem",marginBottom:"0.25rem"}}>{s.emoji}</div>
+              <div style={{fontSize:"0.875rem",fontWeight:700,color:sel?sp.text:"#1f2937"}}>{s.title}</div>
+              <div style={{display:"inline-block",marginTop:"0.25rem",fontSize:"0.7rem",fontWeight:700,padding:"0.1rem 0.5rem",borderRadius:"999px",background:sel?sp.badgeBg:"#f3f4f6",color:sel?sp.badgeText:"#6b7280"}}>{abbr}</div>
             </button>
           );
         })}
       </div>
-      {sc&&(
+
+      {sc && (
         <>
-          <div className={`${cl.light} border-2 ${cl.border} rounded-2xl p-4 space-y-2`}>
-            <p className={`font-bold ${cl.text} text-sm`}>📋 Your Scenario Brief</p>
-            <div className="space-y-1 text-sm">
-              {[["📋 Type",sc.type],["🎭 Appeal",sc.appeal],["✍️ Writer",sc.writer],["👥 Audience",sc.audience],["🎯 Purpose",sc.purpose],["🌍 Context",sc.context]].map(([l,v])=>(
-                <div key={l} className="flex gap-2"><span className="text-gray-500 flex-shrink-0" style={{minWidth:'6rem'}}>{l}:</span><span className="text-gray-800 font-medium">{v}</span></div>
-              ))}
-            </div>
-            <p className="text-xs text-gray-500 italic mt-2">💡 {sc.tip}</p>
+          {/* Brief */}
+          <div style={{background:p.light,border:`2px solid ${p.border}`,borderRadius:"1rem",padding:"1rem"}}>
+            <p style={{margin:"0 0 0.5rem",fontWeight:700,color:p.text,fontSize:"0.875rem"}}>📋 Your Scenario Brief</p>
+            {[["📋 Type",sc.type],["🎭 Appeal",sc.appeal],["✍️ Writer",sc.writer],["👥 Audience",sc.audience],["🎯 Purpose",sc.purpose],["🌍 Context",sc.context]].map(([l,v])=>(
+              <div key={l} style={{display:"flex",gap:"0.5rem",marginBottom:"0.25rem",fontSize:"0.875rem"}}>
+                <span style={{color:"#6b7280",minWidth:"5.5rem",flexShrink:0}}>{l}:</span>
+                <span style={{color:"#1f2937",fontWeight:500}}>{v}</span>
+              </div>
+            ))}
+            <p style={{margin:"0.5rem 0 0",fontSize:"0.75rem",color:"#6b7280",fontStyle:"italic"}}>💡 {sc.tip}</p>
           </div>
+
+          {/* Textarea */}
           <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-sm font-semibold text-gray-700">✍️ Write your post (target: 50–60 words)</label>
-              <span className={`text-xs font-bold px-2 py-1 rounded-full ${wc>=50&&wc<=60?'bg-teal-100 text-teal-700':wc>60?'bg-red-100 text-red-600':'bg-gray-100 text-gray-500'}`}>{wc} words</span>
+            <div style={{display:"flex",justifyContent:"space-between",marginBottom:"0.4rem"}}>
+              <label style={{fontSize:"0.875rem",fontWeight:600,color:"#374151"}}>✍️ Write your post (target: 50–60 words)</label>
+              <span style={{fontSize:"0.75rem",fontWeight:700,padding:"0.2rem 0.6rem",borderRadius:"999px",background:wc>=50&&wc<=60?"#ccfbf1":wc>60?"#fee2e2":"#f3f4f6",color:wc>=50&&wc<=60?"#0f766e":wc>60?"#dc2626":"#6b7280"}}>{wc} words</span>
             </div>
             <textarea value={text} onChange={e=>setText(e.target.value)} rows={5}
               placeholder="Start with a strong hook! Then include your message, details, and a call to action..."
-              className={`w-full border-2 border-gray-200 rounded-xl p-4 text-gray-800 resize-none text-sm leading-relaxed`} style={{outline:'none'}}/>
+              style={{width:"100%",border:"2px solid #e5e7eb",borderRadius:"0.75rem",padding:"0.9rem",fontSize:"0.875rem",lineHeight:1.6,resize:"none",boxSizing:"border-box",outline:"none",color:"#1f2937"}}
+            />
           </div>
-          <div className="flex gap-3">
+
+          {/* Buttons */}
+          <div style={{display:"flex",gap:"0.75rem"}}>
             <button onClick={evaluate} disabled={loading||wc<10}
-              className={`flex-1 py-3 rounded-xl font-bold text-white ${wc>=10&&!loading?cl.btn:'bg-gray-300 cursor-not-allowed'}`}>
+              style={{flex:1,padding:"0.75rem",borderRadius:"0.75rem",fontWeight:700,color:"white",background:wc>=10&&!loading?p.bg:"#d1d5db",border:"none",fontSize:"1rem",cursor:wc>=10&&!loading?"pointer":"not-allowed"}}>
               {loading?"⏳ Evaluating...":"🤖 Get AI Feedback"}
             </button>
-            {sc.model&&<button onClick={()=>setShowModel(!showModel)} className="px-4 py-3 rounded-xl border-2 border-gray-300 text-gray-600 text-sm font-semibold">{showModel?"Hide":"Model"}</button>}
+            {sc.model && (
+              <button onClick={()=>setShowModel(!showModel)}
+                style={{padding:"0.75rem 1rem",borderRadius:"0.75rem",border:"2px solid #e5e7eb",background:"white",color:"#4b5563",fontWeight:600,fontSize:"0.875rem"}}>
+                {showModel?"Hide":"Model"}
+              </button>
+            )}
           </div>
-          {showModel&&sc.model&&(
-            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4 text-sm text-gray-700 italic leading-relaxed">
-              <p className="text-yellow-700 font-bold text-xs mb-2">📝 MODEL ANSWER</p>{sc.model}
+
+          {showModel && sc.model && (
+            <div style={{background:"#fefce8",border:"2px solid #fde047",borderRadius:"0.75rem",padding:"1rem",fontSize:"0.875rem",color:"#374151",fontStyle:"italic",lineHeight:1.6}}>
+              <p style={{margin:"0 0 0.4rem",fontWeight:700,color:"#854d0e",fontSize:"0.75rem"}}>📝 MODEL ANSWER</p>
+              {sc.model}
             </div>
           )}
-          {feedback&&!feedback.error&&(
-            <div className="space-y-4 border-t-2 border-gray-100 pt-4">
-              <div className="flex items-center gap-4">
-                <div className={`w-20 h-20 rounded-full flex items-center justify-center text-2xl font-black text-white flex-shrink-0 ${feedback.score>=80?'bg-teal-400':feedback.score>=60?'bg-orange-400':'bg-red-400'}`}>{feedback.score}</div>
+
+          {/* Feedback */}
+          {feedback && !feedback.error && (
+            <div style={{display:"flex",flexDirection:"column",gap:"0.75rem",borderTop:"2px solid #f3f4f6",paddingTop:"1rem"}}>
+              {/* Score row */}
+              <div style={{display:"flex",alignItems:"center",gap:"1rem"}}>
+                <div style={{width:"4.5rem",height:"4.5rem",borderRadius:"50%",background:feedback.score>=80?"#4ade80":feedback.score>=60?"#fb923c":"#f87171",display:"flex",alignItems:"center",justifyContent:"center",color:"white",fontWeight:900,fontSize:"1.5rem",flexShrink:0}}>{feedback.score}</div>
                 <div>
-                  <p className="font-bold text-gray-800 text-lg">{feedback.grade}</p>
-                  <div className="flex flex-wrap gap-2 mt-1">
+                  <p style={{margin:"0 0 0.3rem",fontWeight:700,color:"#1f2937",fontSize:"1.1rem"}}>{feedback.grade}</p>
+                  <div style={{display:"flex",flexWrap:"wrap",gap:"0.35rem"}}>
                     {[[feedback.has_hook,"Hook"],[feedback.announcement_type_correct,"Correct type"],[feedback.appeal_correct,`Appeal: ${feedback.appeal_used}`],[feedback.word_count_ok,"Word count"]].map(([ok,label])=>(
-                      <span key={label} className={`text-xs px-2 py-0.5 rounded-full font-medium ${ok?'bg-teal-100 text-teal-700':'bg-red-100 text-red-600'}`}>{ok?"✓":"✗"} {label}</span>
+                      <span key={label} style={{fontSize:"0.7rem",fontWeight:700,padding:"0.15rem 0.5rem",borderRadius:"999px",background:ok?"#dcfce7":"#fee2e2",color:ok?"#166534":"#991b1b"}}>{ok?"✓":"✗"} {label}</span>
                     ))}
                   </div>
                 </div>
               </div>
-              {feedback.hook_comment&&<div className={`px-4 py-3 rounded-xl text-sm ${feedback.has_hook?'bg-teal-50 border border-teal-200 text-teal-800':'bg-orange-50 border border-orange-200 text-orange-800'}`}><span className="font-bold">🪝 Hook: </span>{feedback.hook_comment}</div>}
-              {feedback.appeal_comment&&<div className={`px-4 py-3 rounded-xl text-sm ${feedback.appeal_correct?'bg-teal-50 border border-teal-200 text-teal-800':'bg-orange-50 border border-orange-200 text-orange-800'}`}><span className="font-bold">🎭 Appeal: </span>{feedback.appeal_comment}</div>}
-              <div className="bg-teal-50 border border-teal-200 rounded-xl p-4">
-                <p className="text-teal-700 font-bold text-sm mb-2">💪 Strengths</p>
-                <ul className="space-y-1">{feedback.strengths?.map((s,i)=><li key={i} className="text-sm text-gray-700 flex gap-2"><span className="text-teal-500 flex-shrink-0">✓</span>{s}</li>)}</ul>
+              {/* Hook */}
+              {feedback.hook_comment && <div style={{padding:"0.75rem 1rem",borderRadius:"0.75rem",background:feedback.has_hook?"#f0fdf4":"#fff7ed",border:feedback.has_hook?"1px solid #bbf7d0":"1px solid #fed7aa",color:feedback.has_hook?"#166534":"#9a3412",fontSize:"0.875rem"}}><strong>🪝 Hook: </strong>{feedback.hook_comment}</div>}
+              {/* Appeal */}
+              {feedback.appeal_comment && <div style={{padding:"0.75rem 1rem",borderRadius:"0.75rem",background:feedback.appeal_correct?"#f0fdf4":"#fff7ed",border:feedback.appeal_correct?"1px solid #bbf7d0":"1px solid #fed7aa",color:feedback.appeal_correct?"#166534":"#9a3412",fontSize:"0.875rem"}}><strong>🎭 Appeal: </strong>{feedback.appeal_comment}</div>}
+              {/* Strengths */}
+              <div style={{background:"#f0fdf4",border:"1px solid #bbf7d0",borderRadius:"0.75rem",padding:"0.9rem 1rem"}}>
+                <p style={{margin:"0 0 0.4rem",fontWeight:700,color:"#15803d",fontSize:"0.875rem"}}>💪 Strengths</p>
+                {feedback.strengths?.map((s,i)=><div key={i} style={{display:"flex",gap:"0.5rem",fontSize:"0.875rem",color:"#374151",marginBottom:"0.2rem"}}><span style={{color:"#22c55e",flexShrink:0}}>✓</span>{s}</div>)}
               </div>
-              <div className="bg-orange-50 border border-orange-200 rounded-xl p-4">
-                <p className="text-orange-700 font-bold text-sm mb-2">🔧 Suggestions</p>
-                <ul className="space-y-1">{feedback.improvements?.map((s,i)=><li key={i} className="text-sm text-gray-700 flex gap-2"><span className="text-orange-500 flex-shrink-0">→</span>{s}</li>)}</ul>
+              {/* Improvements */}
+              <div style={{background:"#fff7ed",border:"1px solid #fed7aa",borderRadius:"0.75rem",padding:"0.9rem 1rem"}}>
+                <p style={{margin:"0 0 0.4rem",fontWeight:700,color:"#c2410c",fontSize:"0.875rem"}}>🔧 Suggestions</p>
+                {feedback.improvements?.map((s,i)=><div key={i} style={{display:"flex",gap:"0.5rem",fontSize:"0.875rem",color:"#374151",marginBottom:"0.2rem"}}><span style={{color:"#f97316",flexShrink:0}}>→</span>{s}</div>)}
               </div>
-              {feedback.revised_example&&(
-                <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
-                  <p className="text-purple-700 font-bold text-sm mb-2">✨ How it could look</p>
-                  <p className="text-sm text-gray-700 italic leading-relaxed">{feedback.revised_example}</p>
+              {/* Revised */}
+              {feedback.revised_example && (
+                <div style={{background:"#f5f3ff",border:"1px solid #ddd6fe",borderRadius:"0.75rem",padding:"0.9rem 1rem"}}>
+                  <p style={{margin:"0 0 0.4rem",fontWeight:700,color:"#6d28d9",fontSize:"0.875rem"}}>✨ How it could look</p>
+                  <p style={{margin:0,fontSize:"0.875rem",color:"#374151",fontStyle:"italic",lineHeight:1.6}}>{feedback.revised_example}</p>
                 </div>
               )}
             </div>
           )}
-          {feedback?.error&&<div className="bg-red-50 border border-red-200 rounded-xl p-3 text-red-700 text-sm">{feedback.error}</div>}
+          {feedback?.error && <div style={{background:"#fef2f2",border:"1px solid #fecaca",borderRadius:"0.75rem",padding:"0.75rem 1rem",color:"#dc2626",fontSize:"0.875rem"}}>{feedback.error}</div>}
         </>
       )}
     </div>
   );
 }
 
-// ─── APP ──────────────────────────────────────────────────────────────
+/* ── APP ───────────────────────────────────────────────────────────── */
 function App() {
   const [tab, setTab] = useState("learn");
   const tabs = [{id:"learn",label:"📚 Learn",color:"purple"},{id:"practice",label:"🎯 Practice",color:"teal"},{id:"create",label:"✍️ Create",color:"pink"}];
   return (
-    <div className="min-h-screen pb-10">
-      <div style={{background:'linear-gradient(to right,#7c3aed,#ec4899)'}} className="text-white px-5 pt-8 pb-16 text-center shadow-lg">
-        <p className="text-xs uppercase tracking-widest mb-1" style={{color:'#e9d5ff'}}>LSC 1103 · Interactive Lab</p>
-        <h1 className="text-2xl font-black">Social Media Communication</h1>
-        <p className="text-sm mt-1" style={{color:'#f3e8ff'}}>Purpose · Announcement Types · Hooks · Appeals · Writing</p>
+    <div style={{minHeight:"100vh",paddingBottom:"2.5rem"}}>
+      {/* Header */}
+      <div style={{background:"linear-gradient(to right,#7c3aed,#db2777)",color:"white",padding:"2rem 1.25rem 4rem",textAlign:"center",boxShadow:"0 4px 12px rgba(0,0,0,0.15)"}}>
+        <p style={{margin:"0 0 0.25rem",fontSize:"0.7rem",textTransform:"uppercase",letterSpacing:"0.12em",color:"#e9d5ff"}}>LSC 1103 · Interactive Lab</p>
+        <h1 style={{margin:"0 0 0.25rem",fontSize:"1.5rem",fontWeight:900}}>Social Media Communication</h1>
+        <p style={{margin:0,fontSize:"0.85rem",color:"#f3e8ff"}}>Purpose · Announcement Types · Hooks · Appeals · Writing</p>
       </div>
-      <div className="max-w-xl mx-auto px-4" style={{marginTop:'-2rem'}}>
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
-          <div className="flex border-b border-gray-100">
+      {/* Card */}
+      <div style={{maxWidth:"38rem",margin:"-2rem auto 0",padding:"0 1rem"}}>
+        <div style={{background:"white",borderRadius:"1.5rem",boxShadow:"0 8px 32px rgba(0,0,0,0.12)",overflow:"hidden"}}>
+          {/* Tabs */}
+          <div style={{display:"flex",borderBottom:"2px solid #f3f4f6"}}>
             {tabs.map(t=>{
-              const cl=C[t.color]; const active=tab===t.id;
-              return <button key={t.id} onClick={()=>setTab(t.id)} className={`flex-1 py-3 text-sm font-bold ${active?`${cl.text} border-b-2 ${cl.border}`:'text-gray-400'}`}>{t.label}</button>;
+              const tp=PAL[t.color]; const active=tab===t.id;
+              return (
+                <button key={t.id} onClick={()=>setTab(t.id)} style={{flex:1,padding:"0.75rem",fontWeight:700,fontSize:"0.875rem",border:"none",background:"transparent",color:active?tp.text:"#9ca3af",borderBottom:active?`2px solid ${tp.bg}`:"2px solid transparent",marginBottom:"-2px",cursor:"pointer"}}>
+                  {t.label}
+                </button>
+              );
             })}
           </div>
-          <div className="p-5">
-            {tab==="learn"&&<LearnSection/>}
-            {tab==="practice"&&<PracticeSection/>}
-            {tab==="create"&&<CreateSection/>}
+          {/* Content */}
+          <div style={{padding:"1.25rem"}}>
+            {tab==="learn" && <LearnSection/>}
+            {tab==="practice" && <PracticeSection/>}
+            {tab==="create" && <CreateSection/>}
           </div>
         </div>
       </div>
@@ -411,7 +458,7 @@ function App() {
   );
 }
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render(<App/>, document.getElementById("root"));
 </script>
 </body>
 </html>
