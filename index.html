@@ -4,23 +4,32 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>LSC 1103 – Social Media Communication Lab</title>
-<script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
 <style>
-  body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #ede9fe, #fdf2f8, #f0fdfa); min-height: 100vh; }
-  button { cursor: pointer; transition: all 0.15s; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #ede9fe, #fdf2f8, #f0fdfa); min-height: 100vh; padding-bottom: 2.5rem; }
+  button { cursor: pointer; transition: all 0.15s; font-family: inherit; }
   textarea { font-family: 'Segoe UI', sans-serif; }
-  .chevron { display: inline-block; transition: transform 0.2s; }
-  .chevron.open { transform: rotate(90deg); }
 </style>
 </head>
-<body class="pb-10">
+<body>
 <div id="root"></div>
 
 <script type="text/babel">
-const { useState, useCallback } = React;
+const { useState } = React;
+
+/* ── COLOUR PALETTE ─────────────────────────────────────────────── */
+const PAL = {
+  purple:{ bg:"#7c3aed", light:"#f5f3ff", border:"#ddd6fe", text:"#6d28d9", badgeBg:"#ede9fe", badgeText:"#6d28d9" },
+  indigo:{ bg:"#4338ca", light:"#eef2ff", border:"#c7d2fe", text:"#4338ca", badgeBg:"#e0e7ff", badgeText:"#4338ca" },
+  cyan:  { bg:"#0891b2", light:"#ecfeff", border:"#a5f3fc", text:"#0e7490", badgeBg:"#cffafe", badgeText:"#0e7490" },
+  teal:  { bg:"#0d9488", light:"#f0fdfa", border:"#99f6e4", text:"#0f766e", badgeBg:"#ccfbf1", badgeText:"#0f766e" },
+  orange:{ bg:"#ea580c", light:"#fff7ed", border:"#fed7aa", text:"#c2410c", badgeBg:"#ffedd5", badgeText:"#c2410c" },
+  pink:  { bg:"#db2777", light:"#fdf2f8", border:"#fbcfe8", text:"#be185d", badgeBg:"#fce7f3", badgeText:"#be185d" },
+  blue:  { bg:"#2563eb", light:"#eff6ff", border:"#bfdbfe", text:"#1d4ed8", badgeBg:"#dbeafe", badgeText:"#1d4ed8" },
+};
 
 /* ── DATA ─────────────────────────────────────────────────────────── */
 const concepts = [
@@ -121,53 +130,136 @@ const questions = [
   {cat:"Post Quality",q:'"Get 20% off all items tomorrow. Join us for live music. We\'re also launching a new product!" — What\'s wrong?',opts:["Lack of professionalism","Lack of engagement","Lack of clarity","Lack of structure"],ans:3},
 ];
 
-const scenarios = [
-  {id:1,emoji:"📡",title:"IT Services Alert",type:"Company News (CN)",appeal:"Logos (logic + facts)",writer:"IT Services Department",audience:"All campus users",purpose:"To inform & reduce disruption",context:"Sunday, 10:00–12:00 – planned campus network maintenance. Over 2,000 campus users will be affected.",tip:"Logos = numbers & facts. Include exact times, duration (2 hours), number of users affected, and a clear alternative. No emotions — just precise information.",model:"IT Services notice: Campus Wi-Fi will be offline Sunday 10:00–12:00 for scheduled maintenance. Over 2,000 users will be affected during this 2-hour window. To stay connected, use mobile data or visit the Library PCs. Service will return by 12:00. Thank you for your patience.",color:"blue"},
-  {id:2,emoji:"🌱",title:"Environmental Campaign",type:"Upcoming Event (UE)",appeal:"Ethos (credibility + trust)",writer:"HCT Environmental Club",audience:"Students and staff on campus",purpose:"To persuade & call for action",context:"World Environment Day – the club has organised a campus clean-up event with 3 faculty supervisors and partnership with the UAE Ministry of Climate Change.",tip:"Ethos = credibility. Mention the club's faculty support, the Ministry partnership, and the club's track record. Establish authority before making your appeal.",model:null,color:"teal"},
-  {id:3,emoji:"🏆",title:"HCT Competition Win",type:"Milestones & Achievements (MA)",appeal:"Pathos (emotion + pride)",writer:"HCT Student Council",audience:"All HCT students and staff",purpose:"To announce & celebrate",context:"HCT Abu Dhabi Men's College won 1st place at the UAE National Robotics Championship, beating 24 other colleges.",tip:"Pathos = emotion. Use pride, celebration, and inclusive language ('we', 'our'). A strong hook that invites everyone to share the moment works perfectly here.",model:null,color:"orange"},
-  {id:4,emoji:"⚠️",title:"Campus Safety Warning",type:"Company News (CN)",appeal:"Logos (clear facts + statistics)",writer:"HCT Security Office",audience:"All campus community members",purpose:"To warn",context:"In the past 2 weeks, 15 students reported receiving phishing emails asking for login credentials. 3 accounts were compromised.",tip:"Logos = numbers & facts. Use the statistics (15 reports, 3 accounts, 2 weeks) to show the scale of the threat. Add a specific action step. No emotional language — factual and clear.",model:null,color:"pink"},
-  {id:5,emoji:"🤝",title:"New Campus Partnership",type:"Partnerships & Collaborations (PC)",appeal:"Ethos (credibility + authority)",writer:"HCT Communications Office",audience:"Students, staff, and industry professionals",purpose:"To announce",context:"HCT has signed a 3-year MOU with Microsoft UAE to provide students with free Azure cloud certifications and internship opportunities at Microsoft offices.",tip:"Ethos = credibility. Lead with both organisations' names and their authority. Mention the specific benefit (free certifications, internships) and the formal agreement (MOU, 3-year). Use a punchy hook.",model:null,color:"indigo"},
-  {id:6,emoji:"💼",title:"Faculty Job Opening",type:"Hiring Notice (HN)",appeal:"Logos (clear, factual details)",writer:"HCT Human Resources",audience:"Qualified English language professionals",purpose:"To inform & call for action",context:"HCT is hiring 5 new English language instructors across UAE campuses. Deadline: March 31st. Minimum requirement: Master's degree + 3 years' teaching experience.",tip:"Logos = precise facts. Include the number of positions (5), qualifications required, deadline (March 31st), and a clear call to action. Hook with energy — make it exciting to apply!",model:null,color:"purple"},
+const checklist = [
+  {id:"hook", label:"I started with a strong hook"},
+  {id:"type", label:"My post matches the announcement type"},
+  {id:"appeal", label:"I used the correct rhetorical appeal"},
+  {id:"audience", label:"I addressed the right audience"},
+  {id:"numbers", label:"I included numbers/stats (if Logos)"},
+  {id:"words", label:"My post is between 50–60 words"},
+  {id:"professional", label:"My language is professional and clear"},
 ];
 
-/* ── COLOUR PALETTE ───────────────────────────────────────────────── */
-const PAL = {
-  purple:{ bg:"#7c3aed", light:"#f5f3ff", border:"#ddd6fe", text:"#6d28d9", badgeBg:"#ede9fe", badgeText:"#6d28d9", btn:"#7c3aed", btnH:"#6d28d9" },
-  indigo:{ bg:"#4338ca", light:"#eef2ff", border:"#c7d2fe", text:"#4338ca", badgeBg:"#e0e7ff", badgeText:"#4338ca", btn:"#4338ca", btnH:"#3730a3" },
-  cyan:  { bg:"#0891b2", light:"#ecfeff", border:"#a5f3fc", text:"#0e7490", badgeBg:"#cffafe", badgeText:"#0e7490", btn:"#0891b2", btnH:"#0e7490" },
-  teal:  { bg:"#0d9488", light:"#f0fdfa", border:"#99f6e4", text:"#0f766e", badgeBg:"#ccfbf1", badgeText:"#0f766e", btn:"#0d9488", btnH:"#0f766e" },
-  orange:{ bg:"#ea580c", light:"#fff7ed", border:"#fed7aa", text:"#c2410c", badgeBg:"#ffedd5", badgeText:"#c2410c", btn:"#ea580c", btnH:"#c2410c" },
-  pink:  { bg:"#db2777", light:"#fdf2f8", border:"#fbcfe8", text:"#be185d", badgeBg:"#fce7f3", badgeText:"#be185d", btn:"#db2777", btnH:"#be185d" },
-  blue:  { bg:"#2563eb", light:"#eff6ff", border:"#bfdbfe", text:"#1d4ed8", badgeBg:"#dbeafe", badgeText:"#1d4ed8", btn:"#2563eb", btnH:"#1d4ed8" },
-};
+const scenarios = [
+  {
+    id:1, emoji:"📡", title:"IT Services Alert", color:"blue",
+    type:"Company News (CN)", appeal:"Logos (logic + facts)",
+    writer:"IT Services Department", audience:"All campus users",
+    purpose:"To inform & reduce disruption",
+    context:"Sunday, 10:00–12:00 – planned campus network maintenance. Over 2,000 campus users will be affected.",
+    tip:"Logos = numbers & facts. Include exact times, duration (2 hours), number of users affected, and a clear alternative. No emotions — just precise information.",
+    model:"IT Services notice: Campus Wi-Fi will be offline Sunday 10:00–12:00 for scheduled maintenance. Over 2,000 users will be affected during this 2-hour window. To stay connected, use mobile data or visit the Library PCs. Service will return by 12:00. Thank you for your patience.",
+    breakdown:[
+      {label:"🪝 Hook",note:'"IT Services notice:" — clear, direct, professional opener.'},
+      {label:"📊 Logos",note:"Exact times (10:00–12:00), duration (2 hours), number of users (2,000) — all facts."},
+      {label:"🎯 Purpose",note:"Informs and reduces disruption with a practical alternative."},
+      {label:"✍️ Writer",note:"IT Services — formal, institutional voice used throughout."},
+    ]
+  },
+  {
+    id:2, emoji:"🌱", title:"Environmental Campaign", color:"teal",
+    type:"Upcoming Event (UE)", appeal:"Ethos (credibility + trust)",
+    writer:"HCT Environmental Club", audience:"Students and staff on campus",
+    purpose:"To persuade & call for action",
+    context:"World Environment Day – the club has organised a campus clean-up with 3 faculty supervisors and partnership with the UAE Ministry of Climate Change.",
+    tip:"Ethos = credibility. Mention the club's faculty support, the Ministry partnership, and the club's track record. Establish authority before making your appeal.",
+    model:"HCT Environmental Club, backed by 3 faculty supervisors and the UAE Ministry of Climate Change, invites you to our World Environment Day campus clean-up. Endorsed by experts and guided by professionals, this is your chance to make a real impact. Join us — our campus, our responsibility.",
+    breakdown:[
+      {label:"🪝 Hook",note:'"HCT Environmental Club, backed by 3 faculty supervisors…" — establishes credibility immediately.'},
+      {label:"🏅 Ethos",note:"Faculty endorsement, Ministry partnership — authority is established before the call to action."},
+      {label:"🎯 Purpose",note:"Persuades and calls students to join the event."},
+      {label:"👥 Audience",note:"Students and staff addressed directly with "our campus, our responsibility.""},
+    ]
+  },
+  {
+    id:3, emoji:"🏆", title:"HCT Competition Win", color:"orange",
+    type:"Milestones & Achievements (MA)", appeal:"Pathos (emotion + pride)",
+    writer:"HCT Student Council", audience:"All HCT students and staff",
+    purpose:"To announce & celebrate",
+    context:"HCT Abu Dhabi Men's College won 1st place at the UAE National Robotics Championship, beating 24 other colleges.",
+    tip:"Pathos = emotion. Use pride, celebration, and inclusive language ('we', 'our'). A strong hook that invites everyone to share the moment works perfectly here.",
+    model:"We did it! 🏆 HCT Abu Dhabi Men's College has won 1st place at the UAE National Robotics Championship, defeating 24 colleges across the country. This is YOUR victory — every student, every lecturer, every supporter made this possible. We are HCT. We are champions. Congratulations to our incredible team!",
+    breakdown:[
+      {label:"🪝 Hook",note:'"We did it! 🏆" — short, emotional, immediately celebratory.'},
+      {label:"❤️ Pathos",note:"Pride, celebration, inclusive 'we/our/your' language — emotionally connects the whole community."},
+      {label:"📋 Type",note:"Milestones & Achievements — celebrates a landmark victory with specific facts (1st place, 24 colleges)."},
+      {label:"👥 Audience",note:"All HCT addressed directly: "every student, every lecturer, every supporter.""},
+    ]
+  },
+  {
+    id:4, emoji:"⚠️", title:"Campus Safety Warning", color:"pink",
+    type:"Company News (CN)", appeal:"Logos (clear facts + statistics)",
+    writer:"HCT Security Office", audience:"All campus community members",
+    purpose:"To warn",
+    context:"In the past 2 weeks, 15 students reported receiving phishing emails asking for login credentials. 3 accounts were compromised.",
+    tip:"Logos = numbers & facts. Use the statistics (15 reports, 3 accounts, 2 weeks) to show the scale of the threat. Add a specific action step. No emotional language — factual and clear.",
+    model:"Security Alert: In the past 2 weeks, 15 students have reported phishing emails requesting HCT login credentials, resulting in 3 compromised accounts. Do NOT click suspicious links or share your password. Report any suspicious emails immediately to security@hct.ac.ae. Your account security is our priority.",
+    breakdown:[
+      {label:"🪝 Hook",note:'"Security Alert:" — direct and urgent without being emotional.'},
+      {label:"📊 Logos",note:"Three precise statistics: 2 weeks, 15 students, 3 compromised accounts — no exaggeration, just facts."},
+      {label:"🎯 Purpose",note:"Warns clearly and provides a specific action step (report to security@hct.ac.ae)."},
+      {label:"✍️ Writer",note:"HCT Security Office — formal, professional, authoritative tone throughout."},
+    ]
+  },
+  {
+    id:5, emoji:"🤝", title:"New Campus Partnership", color:"indigo",
+    type:"Partnerships & Collaborations (PC)", appeal:"Ethos (credibility + authority)",
+    writer:"HCT Communications Office", audience:"Students, staff, and industry professionals",
+    purpose:"To announce",
+    context:"HCT has signed a 3-year MOU with Microsoft UAE to provide students with free Azure cloud certifications and internship opportunities at Microsoft offices.",
+    tip:"Ethos = credibility. Lead with both organisations' names and their authority. Mention the specific benefit (free certifications, internships) and the formal agreement (MOU, 3-year). Use a punchy hook.",
+    model:"Big news from HCT and Microsoft UAE! We have signed a 3-year MOU to give HCT students free Azure cloud certifications and real internship opportunities at Microsoft offices across the UAE. Backed by two world-class institutions, your future just got bigger. Applications open next semester — stay tuned.",
+    breakdown:[
+      {label:"🪝 Hook",note:'"Big news from HCT and Microsoft UAE!" — names both partners immediately, signals importance.'},
+      {label:"🏅 Ethos",note:"Two authoritative organisations named upfront, formal agreement (MOU, 3-year) establishes credibility."},
+      {label:"📋 Type",note:"Partnership & Collaboration — both organisation names and the joint benefit are clear."},
+      {label:"🎯 Purpose",note:"Announces the partnership and clearly states the benefit to the audience."},
+    ]
+  },
+  {
+    id:6, emoji:"💼", title:"Faculty Job Opening", color:"purple",
+    type:"Hiring Notice (HN)", appeal:"Logos (clear, factual details)",
+    writer:"HCT Human Resources", audience:"Qualified English language professionals",
+    purpose:"To inform & call for action",
+    context:"HCT is hiring 5 new English language instructors across UAE campuses. Deadline: March 31st. Minimum requirement: Master's degree + 3 years' teaching experience.",
+    tip:"Logos = precise facts. Include the number of positions (5), qualifications required, deadline (March 31st), and a clear call to action. Hook with energy — make it exciting to apply!",
+    model:"Jobs, jobs, jobs! HCT is hiring 5 English language instructors across our UAE campuses. Requirements: Master's degree in English or Education + minimum 3 years' teaching experience. Application deadline: March 31st. Join one of the UAE's leading higher education institutions — apply now at hct.ac.ae/careers.",
+    breakdown:[
+      {label:"🪝 Hook",note:'"Jobs, jobs, jobs!" — energetic repetition, instantly signals a hiring notice.'},
+      {label:"📊 Logos",note:"All key facts: 5 positions, specific qualifications, exact deadline (March 31st), direct application link."},
+      {label:"📋 Type",note:"Hiring Notice — follows the expected structure: role, requirements, deadline, how to apply."},
+      {label:"🎯 Purpose",note:"Informs and calls qualified readers to take immediate action."},
+    ]
+  },
+];
+
 const catColor = {"Announcement Type":"indigo","Hooks":"cyan","Purpose":"purple","Rhetorical Appeal":"teal","Post Elements":"orange","Post Quality":"pink"};
 
 /* ── LEARN ─────────────────────────────────────────────────────────── */
 function LearnSection() {
   const [open, setOpen] = useState({});
-  const tog = (g,i) => setOpen(p => ({...p, [`${g}-${i}`]: !p[`${g}-${i}`]}));
+  const tog = (g,i) => setOpen(p=>({...p,[`${g}-${i}`]:!p[`${g}-${i}`]}));
   return (
     <div style={{display:"flex",flexDirection:"column",gap:"1.25rem"}}>
-      {concepts.map((grp, gi) => {
-        const p = PAL[grp.color];
+      {concepts.map((grp,gi)=>{
+        const p=PAL[grp.color];
         return (
           <div key={gi} style={{borderRadius:"1rem",border:`2px solid ${p.border}`,overflow:"hidden",boxShadow:"0 1px 4px rgba(0,0,0,0.06)"}}>
             <div style={{background:p.bg,color:"white",padding:"0.75rem 1.25rem",fontWeight:700,fontSize:"1rem"}}>{grp.group}</div>
-            {grp.items.map((item, ii) => {
-              const isOpen = !!open[`${gi}-${ii}`];
+            {grp.items.map((item,ii)=>{
+              const isOpen=!!open[`${gi}-${ii}`];
               return (
                 <div key={ii} style={{borderTop:ii>0?`1px solid ${p.border}`:"none",background:p.light}}>
                   <button onClick={()=>tog(gi,ii)} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0.7rem 1.25rem",background:"transparent",border:"none",textAlign:"left"}}>
                     <span style={{display:"flex",alignItems:"center",gap:"0.5rem",fontWeight:600,color:p.text}}>
-                      <span>{item.icon}</span>
-                      <span>{item.term}</span>
-                      {item.abbr && <span style={{fontSize:"0.7rem",fontWeight:700,padding:"0.1rem 0.5rem",borderRadius:"999px",background:p.badgeBg,color:p.badgeText}}>{item.abbr}</span>}
+                      <span>{item.icon}</span><span>{item.term}</span>
+                      {item.abbr&&<span style={{fontSize:"0.7rem",fontWeight:700,padding:"0.1rem 0.5rem",borderRadius:"999px",background:p.badgeBg,color:p.badgeText}}>{item.abbr}</span>}
                     </span>
-                    <span className="chevron" style={{transform:isOpen?"rotate(90deg)":"rotate(0deg)",color:"#9ca3af",fontSize:"1.2rem",transition:"transform 0.2s"}}>›</span>
+                    <span style={{display:"inline-block",transform:isOpen?"rotate(90deg)":"rotate(0deg)",transition:"transform 0.2s",color:"#9ca3af",fontSize:"1.2rem"}}>›</span>
                   </button>
-                  {isOpen && (
+                  {isOpen&&(
                     <div style={{padding:"0 1.25rem 0.9rem 1.25rem",display:"flex",flexDirection:"column",gap:"0.5rem"}}>
-                      <p style={{color:"#374151",fontSize:"0.875rem",margin:0}}>{item.def}</p>
+                      <p style={{color:"#374151",fontSize:"0.875rem"}}>{item.def}</p>
                       <div style={{fontSize:"0.75rem",fontStyle:"italic",padding:"0.5rem 0.75rem",borderRadius:"0.5rem",background:p.badgeBg,color:p.badgeText,border:`1px solid ${p.border}`}}>📌 {item.ex}</div>
                     </div>
                   )}
@@ -177,7 +269,7 @@ function LearnSection() {
           </div>
         );
       })}
-      {/* Quick Ref Table */}
+      {/* Quick ref table */}
       <div style={{borderRadius:"1rem",border:"2px solid #c7d2fe",overflow:"hidden",boxShadow:"0 1px 4px rgba(0,0,0,0.06)"}}>
         <div style={{background:"#4338ca",color:"white",padding:"0.75rem 1.25rem",fontWeight:700,fontSize:"1rem"}}>📊 Quick Reference — 7 Announcement Types</div>
         <table style={{width:"100%",borderCollapse:"collapse",fontSize:"0.875rem"}}>
@@ -211,25 +303,25 @@ function PracticeSection() {
   const [done, setDone] = useState(false);
   const [hist, setHist] = useState([]);
 
-  const q = pool[idx];
-  const p = PAL[catColor[q?.cat]||"purple"];
-  const correct = sel === q?.ans;
+  const q=pool[idx];
+  const p=PAL[catColor[q?.cat]||"purple"];
+  const correct=sel===q?.ans;
 
-  const next = () => {
+  const next=()=>{
     setHist(h=>[...h,{ok:sel===q.ans}]);
     if(idx+1>=pool.length) setDone(true);
-    else { setIdx(i=>i+1); setSel(null); }
+    else{setIdx(i=>i+1);setSel(null);}
   };
-  const restart = () => { setIdx(0); setSel(null); setDone(false); setHist([]); };
+  const restart=()=>{setIdx(0);setSel(null);setDone(false);setHist([]);};
 
-  if(done) {
-    const total = hist.filter(h=>h.ok).length;
-    const pct = Math.round((total/pool.length)*100);
+  if(done){
+    const total=hist.filter(h=>h.ok).length;
+    const pct=Math.round((total/pool.length)*100);
     return (
       <div style={{textAlign:"center",padding:"2rem 0",display:"flex",flexDirection:"column",alignItems:"center",gap:"1rem"}}>
         <div style={{fontSize:"3.5rem",fontWeight:900,color:pct>=80?"#14b8a6":"#f97316"}}>{pct}%</div>
-        <p style={{fontSize:"1.4rem",fontWeight:700,color:"#1f2937",margin:0}}>{pct>=80?"🎉 Excellent work!":"💪 Keep practising!"}</p>
-        <p style={{color:"#6b7280",margin:0}}>You got {total} out of {pool.length} correct.</p>
+        <p style={{fontSize:"1.4rem",fontWeight:700,color:"#1f2937"}}>{pct>=80?"🎉 Excellent work!":"💪 Keep practising!"}</p>
+        <p style={{color:"#6b7280"}}>You got {total} out of {pool.length} correct.</p>
         <div style={{display:"flex",flexWrap:"wrap",gap:"0.4rem",justifyContent:"center",maxWidth:"18rem"}}>
           {hist.map((h,i)=><div key={i} style={{width:"2.2rem",height:"2.2rem",borderRadius:"50%",background:h.ok?"#4ade80":"#f87171",display:"flex",alignItems:"center",justifyContent:"center",color:"white",fontWeight:700,fontSize:"0.75rem"}}>{i+1}</div>)}
         </div>
@@ -240,23 +332,19 @@ function PracticeSection() {
 
   return (
     <div style={{display:"flex",flexDirection:"column",gap:"1rem"}}>
-      {/* header */}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         <span style={{fontSize:"0.75rem",fontWeight:700,padding:"0.2rem 0.75rem",borderRadius:"999px",background:p.badgeBg,color:p.badgeText}}>{q.cat}</span>
         <span style={{fontSize:"0.875rem",color:"#6b7280"}}>{idx+1} / {pool.length}</span>
       </div>
-      {/* progress */}
       <div style={{background:"#e5e7eb",borderRadius:"999px",height:"0.5rem"}}>
         <div style={{background:p.bg,height:"0.5rem",borderRadius:"999px",width:`${(idx/pool.length)*100}%`,transition:"width 0.3s"}}/>
       </div>
-      {/* question */}
       <div style={{background:p.light,border:`2px solid ${p.border}`,borderRadius:"1rem",padding:"1.1rem 1.25rem"}}>
-        <p style={{margin:0,fontWeight:500,color:"#1f2937",lineHeight:1.6}}>{q.q}</p>
+        <p style={{fontWeight:500,color:"#1f2937",lineHeight:1.6}}>{q.q}</p>
       </div>
-      {/* options */}
       <div style={{display:"flex",flexDirection:"column",gap:"0.6rem"}}>
         {q.opts.map((opt,i)=>{
-          let bg="#ffffff",border="2px solid #e5e7eb",color="#374151";
+          let bg="#fff",border="2px solid #e5e7eb",color="#374151";
           if(sel!==null){
             if(i===q.ans){bg="#f0fdf4";border="2px solid #4ade80";color="#166534";}
             else if(i===sel){bg="#fef2f2";border="2px solid #f87171";color="#991b1b";}
@@ -272,10 +360,9 @@ function PracticeSection() {
           );
         })}
       </div>
-      {/* feedback */}
-      {sel!==null && (
+      {sel!==null&&(
         <div style={{padding:"0.75rem 1rem",borderRadius:"0.75rem",background:correct?"#f0fdf4":"#fef2f2",border:correct?"1px solid #bbf7d0":"1px solid #fecaca",color:correct?"#166534":"#991b1b",fontWeight:500,fontSize:"0.875rem"}}>
-          {correct?"✅ Correct! Well done.": `❌ Not quite. The correct answer is: "${q.opts[q.ans]}"`}
+          {correct?"✅ Correct! Well done.":`❌ Not quite. The correct answer is: "${q.opts[q.ans]}"`}
         </div>
       )}
       <button onClick={next} disabled={sel===null} style={{width:"100%",padding:"0.75rem",borderRadius:"0.75rem",fontWeight:700,color:"white",background:sel!==null?p.bg:"#d1d5db",border:"none",fontSize:"1rem",cursor:sel!==null?"pointer":"not-allowed"}}>
@@ -285,41 +372,117 @@ function PracticeSection() {
   );
 }
 
+/* ── PRINT ─────────────────────────────────────────────────────────── */
+function handlePrint(sc, text, wc, checks) {
+  const checkedItems = checklist.filter(c=>checks[c.id]);
+  const uncheckedItems = checklist.filter(c=>!checks[c.id]);
+  const win = window.open("","_blank");
+  win.document.write(`<!DOCTYPE html>
+<html><head><meta charset="UTF-8"/>
+<title>LSC 1103 – Writing Task: ${sc.title}</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #1f2937; padding: 2.5rem; max-width: 750px; margin: 0 auto; font-size: 14px; }
+  h1 { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.2rem; }
+  .subtitle { color: #6b7280; font-size: 0.8rem; margin-bottom: 1.5rem; }
+  .section { border: 2px solid #e5e7eb; border-radius: 0.75rem; padding: 1rem 1.2rem; margin-bottom: 1.2rem; }
+  .section-title { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.6rem; }
+  .brief-row { display: flex; gap: 0.5rem; margin-bottom: 0.25rem; font-size: 0.875rem; }
+  .brief-label { color: #6b7280; min-width: 5rem; flex-shrink: 0; }
+  .brief-val { font-weight: 600; }
+  .tip { margin-top: 0.6rem; font-size: 0.8rem; color: #6b7280; font-style: italic; }
+  .student-text { font-size: 0.95rem; line-height: 1.8; color: #111827; white-space: pre-wrap; }
+  .wc { display: inline-block; font-size: 0.75rem; font-weight: 700; padding: 0.15rem 0.6rem; border-radius: 999px; margin-left: 0.5rem; }
+  .wc-ok { background: #ccfbf1; color: #0f766e; }
+  .wc-bad { background: #fee2e2; color: #dc2626; }
+  .model-text { font-size: 0.95rem; line-height: 1.8; color: #111827; font-style: italic; }
+  .breakdown-item { padding: 0.5rem 0.75rem; border-radius: 0.4rem; border: 1px solid #e0e7ff; margin-bottom: 0.4rem; font-size: 0.8rem; background: #f5f7ff; }
+  .breakdown-label { font-weight: 700; color: #4338ca; }
+  .check-row { font-size: 0.8rem; display: flex; gap: 0.4rem; margin-bottom: 0.25rem; }
+  .ok { color: #15803d; }
+  .miss { color: #dc2626; }
+  .divider { border: none; border-top: 2px dashed #e5e7eb; margin: 1.2rem 0; }
+  .header-bar { background: linear-gradient(to right, #7c3aed, #db2777); color: white; padding: 1rem 1.2rem; border-radius: 0.75rem; margin-bottom: 1.5rem; }
+  .header-bar h1 { font-size: 1.1rem; }
+  .header-bar p { font-size: 0.75rem; opacity: 0.85; margin-top: 0.2rem; }
+  @media print { body { padding: 1.5rem; } button { display: none; } }
+</style>
+</head><body>
+<div class="header-bar">
+  <h1>LSC 1103 – Social Media Communication Lab</h1>
+  <p>Writing Task: ${sc.title} &nbsp;|&nbsp; ${sc.type} &nbsp;|&nbsp; ${sc.appeal}</p>
+</div>
+
+<div class="section" style="border-color:#c7d2fe;">
+  <div class="section-title" style="color:#4338ca;">📋 Scenario Brief</div>
+  <div class="brief-row"><span class="brief-label">Type:</span><span class="brief-val">${sc.type}</span></div>
+  <div class="brief-row"><span class="brief-label">Appeal:</span><span class="brief-val">${sc.appeal}</span></div>
+  <div class="brief-row"><span class="brief-label">Writer:</span><span class="brief-val">${sc.writer}</span></div>
+  <div class="brief-row"><span class="brief-label">Audience:</span><span class="brief-val">${sc.audience}</span></div>
+  <div class="brief-row"><span class="brief-label">Purpose:</span><span class="brief-val">${sc.purpose}</span></div>
+  <div class="brief-row"><span class="brief-label">Context:</span><span class="brief-val">${sc.context}</span></div>
+  <div class="tip">💡 ${sc.tip}</div>
+</div>
+
+<div class="section" style="border-color:#ddd6fe;">
+  <div class="section-title" style="color:#6d28d9;">✍️ My Answer <span class="wc ${wc>=50&&wc<=60?'wc-ok':'wc-bad'}">${wc} words</span></div>
+  <div class="student-text">${text.trim()||"(no answer written)"}</div>
+</div>
+
+<div class="section" style="border-color:#e5e7eb;">
+  <div class="section-title" style="color:#374151;">☑️ Self-Check</div>
+  ${checkedItems.map(c=>`<div class="check-row"><span class="ok">✓</span> ${c.label}</div>`).join("")}
+  ${uncheckedItems.map(c=>`<div class="check-row"><span class="miss">✗</span> ${c.label}</div>`).join("")}
+</div>
+
+<hr class="divider"/>
+
+<div class="section" style="border-color:#fde047;background:#fefce8;">
+  <div class="section-title" style="color:#854d0e;">📝 Model Answer</div>
+  <div class="model-text">${sc.model}</div>
+</div>
+
+<div class="section" style="border-color:#c7d2fe;background:#eef2ff;">
+  <div class="section-title" style="color:#4338ca;">🔍 Why the Model Answer Works</div>
+  ${sc.breakdown.map(b=>`<div class="breakdown-item"><span class="breakdown-label">${b.label}: </span>${b.note}</div>`).join("")}
+</div>
+
+<div style="text-align:center;margin-top:1.5rem;font-size:0.75rem;color:#9ca3af;">
+  LSC 1103 · Higher Colleges of Technology · Social Media Communication Lab
+</div>
+</body></html>`);
+  win.document.close();
+  win.focus();
+  setTimeout(()=>win.print(), 400);
+}
+
 /* ── CREATE ────────────────────────────────────────────────────────── */
 function CreateSection() {
   const [picked, setPicked] = useState(null);
   const [text, setText] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [feedback, setFeedback] = useState(null);
+  const [checks, setChecks] = useState({});
   const [showModel, setShowModel] = useState(false);
+  const [showBreakdown, setShowBreakdown] = useState(false);
 
   const sc = scenarios.find(s=>s.id===picked);
   const p = sc ? PAL[sc.color] : null;
   const wc = text.trim().split(/\s+/).filter(Boolean).length;
+  const checkedCount = Object.values(checks).filter(Boolean).length;
 
-  const evaluate = useCallback(async()=>{
-    if(!sc||wc<10) return;
-    setLoading(true); setFeedback(null);
-    const prompt = `You are an English language instructor at a UAE university. A student wrote a social media post based on this exam scenario:\n\nSCENARIO:\n- Announcement type: ${sc.type}\n- Rhetorical appeal: ${sc.appeal}\n- Writer: ${sc.writer}\n- Audience: ${sc.audience}\n- Purpose: ${sc.purpose}\n- Context: ${sc.context}\n\nSTUDENT POST (${wc} words): "${text.trim()}"\n\nEvaluate. The post should: match the announcement type, use the correct rhetorical appeal (Logos=must include specific numbers/stats from context; Ethos=establish credibility; Pathos=emotional language), have an engaging hook as the first sentence, be 50-60 words, address the correct audience.\n\nRespond ONLY in this JSON (no markdown):\n{"score":<0-100>,"grade":"<Excellent|Good|Developing|Needs Improvement>","has_hook":<true|false>,"hook_comment":"<one sentence>","announcement_type_correct":<true|false>,"appeal_used":"<Logos|Ethos|Pathos|Unclear>","appeal_correct":<true|false>,"appeal_comment":"<one sentence — for Logos: did they use numbers? if not, say what is missing>","word_count_ok":<true|false>,"strengths":["<point>","<point>"],"improvements":["<point>","<point>"],"revised_example":"<improved 50-60 word version with strong hook and correct appeal>"}`;
-    try {
-      const res = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]})});
-      const data = await res.json();
-      const raw = data.content?.map(b=>b.text||"").join("").replace(/```json|```/g,"").trim();
-      setFeedback(JSON.parse(raw));
-    } catch(e){ setFeedback({error:"Could not get feedback. Please try again."}); }
-    setLoading(false);
-  },[sc,text,wc]);
+  const selectScenario = (id) => {
+    setPicked(id); setText(""); setChecks({}); setShowModel(false); setShowBreakdown(false);
+  };
 
   return (
     <div style={{display:"flex",flexDirection:"column",gap:"1rem"}}>
-      <p style={{margin:0,fontSize:"0.875rem",fontWeight:600,color:"#4b5563"}}>Choose a scenario to write about:</p>
+      <p style={{fontSize:"0.875rem",fontWeight:600,color:"#4b5563"}}>Choose a scenario to write about:</p>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0.75rem"}}>
         {scenarios.map(s=>{
           const sp=PAL[s.color]; const sel=picked===s.id;
-          const abbr = s.type.match(/\(([^)]+)\)/)?.[1]||"";
+          const abbr=s.type.match(/\(([^)]+)\)/)?.[1]||"";
           return (
-            <button key={s.id} onClick={()=>{setPicked(s.id);setText("");setFeedback(null);setShowModel(false);}}
-              style={{padding:"0.75rem",borderRadius:"0.75rem",border:sel?`2px solid ${sp.border}`:"2px solid #e5e7eb",background:sel?sp.light:"white",textAlign:"left",boxShadow:sel?`0 0 0 2px ${sp.bg}33`:"none"}}>
+            <button key={s.id} onClick={()=>selectScenario(s.id)}
+              style={{padding:"0.75rem",borderRadius:"0.75rem",border:sel?`2px solid ${sp.bg}`:"2px solid #e5e7eb",background:sel?sp.light:"white",textAlign:"left",boxShadow:sel?`0 0 0 2px ${sp.bg}44`:"none"}}>
               <div style={{fontSize:"1.5rem",marginBottom:"0.25rem"}}>{s.emoji}</div>
               <div style={{fontSize:"0.875rem",fontWeight:700,color:sel?sp.text:"#1f2937"}}>{s.title}</div>
               <div style={{display:"inline-block",marginTop:"0.25rem",fontSize:"0.7rem",fontWeight:700,padding:"0.1rem 0.5rem",borderRadius:"999px",background:sel?sp.badgeBg:"#f3f4f6",color:sel?sp.badgeText:"#6b7280"}}>{abbr}</div>
@@ -328,18 +491,18 @@ function CreateSection() {
         })}
       </div>
 
-      {sc && (
+      {sc&&(
         <>
           {/* Brief */}
           <div style={{background:p.light,border:`2px solid ${p.border}`,borderRadius:"1rem",padding:"1rem"}}>
-            <p style={{margin:"0 0 0.5rem",fontWeight:700,color:p.text,fontSize:"0.875rem"}}>📋 Your Scenario Brief</p>
+            <p style={{fontWeight:700,color:p.text,fontSize:"0.875rem",marginBottom:"0.5rem"}}>📋 Your Scenario Brief</p>
             {[["📋 Type",sc.type],["🎭 Appeal",sc.appeal],["✍️ Writer",sc.writer],["👥 Audience",sc.audience],["🎯 Purpose",sc.purpose],["🌍 Context",sc.context]].map(([l,v])=>(
               <div key={l} style={{display:"flex",gap:"0.5rem",marginBottom:"0.25rem",fontSize:"0.875rem"}}>
                 <span style={{color:"#6b7280",minWidth:"5.5rem",flexShrink:0}}>{l}:</span>
                 <span style={{color:"#1f2937",fontWeight:500}}>{v}</span>
               </div>
             ))}
-            <p style={{margin:"0.5rem 0 0",fontSize:"0.75rem",color:"#6b7280",fontStyle:"italic"}}>💡 {sc.tip}</p>
+            <p style={{marginTop:"0.5rem",fontSize:"0.75rem",color:"#6b7280",fontStyle:"italic"}}>💡 {sc.tip}</p>
           </div>
 
           {/* Textarea */}
@@ -350,70 +513,66 @@ function CreateSection() {
             </div>
             <textarea value={text} onChange={e=>setText(e.target.value)} rows={5}
               placeholder="Start with a strong hook! Then include your message, details, and a call to action..."
-              style={{width:"100%",border:"2px solid #e5e7eb",borderRadius:"0.75rem",padding:"0.9rem",fontSize:"0.875rem",lineHeight:1.6,resize:"none",boxSizing:"border-box",outline:"none",color:"#1f2937"}}
-            />
+              style={{width:"100%",border:"2px solid #e5e7eb",borderRadius:"0.75rem",padding:"0.9rem",fontSize:"0.875rem",lineHeight:1.6,resize:"none",outline:"none",color:"#1f2937"}}/>
           </div>
 
-          {/* Buttons */}
-          <div style={{display:"flex",gap:"0.75rem"}}>
-            <button onClick={evaluate} disabled={loading||wc<10}
-              style={{flex:1,padding:"0.75rem",borderRadius:"0.75rem",fontWeight:700,color:"white",background:wc>=10&&!loading?p.bg:"#d1d5db",border:"none",fontSize:"1rem",cursor:wc>=10&&!loading?"pointer":"not-allowed"}}>
-              {loading?"⏳ Evaluating...":"🤖 Get AI Feedback"}
-            </button>
-            {sc.model && (
-              <button onClick={()=>setShowModel(!showModel)}
-                style={{padding:"0.75rem 1rem",borderRadius:"0.75rem",border:"2px solid #e5e7eb",background:"white",color:"#4b5563",fontWeight:600,fontSize:"0.875rem"}}>
-                {showModel?"Hide":"Model"}
-              </button>
+          {/* Self-check */}
+          <div style={{background:"#f8fafc",border:"2px solid #e2e8f0",borderRadius:"1rem",padding:"1rem"}}>
+            <p style={{fontWeight:700,color:"#334155",fontSize:"0.875rem",marginBottom:"0.6rem"}}>☑️ Self-Check ({checkedCount}/{checklist.length})</p>
+            {checklist.map(c=>(
+              <label key={c.id} style={{display:"flex",alignItems:"center",gap:"0.6rem",marginBottom:"0.4rem",cursor:"pointer",fontSize:"0.875rem",color:"#374151"}}>
+                <input type="checkbox" checked={!!checks[c.id]} onChange={e=>setChecks(prev=>({...prev,[c.id]:e.target.checked}))}
+                  style={{width:"1.1rem",height:"1.1rem",accentColor:p.bg,cursor:"pointer"}}/>
+                <span style={{color:checks[c.id]?p.text:"#374151",fontWeight:checks[c.id]?600:400}}>{c.label}</span>
+              </label>
+            ))}
+            {checkedCount===checklist.length&&(
+              <div style={{marginTop:"0.6rem",padding:"0.6rem 0.75rem",borderRadius:"0.6rem",background:"#f0fdf4",border:"1px solid #bbf7d0",color:"#166534",fontSize:"0.8rem",fontWeight:600}}>
+                ✅ Great job checking your work! Now compare with the model answer below.
+              </div>
             )}
           </div>
 
-          {showModel && sc.model && (
-            <div style={{background:"#fefce8",border:"2px solid #fde047",borderRadius:"0.75rem",padding:"1rem",fontSize:"0.875rem",color:"#374151",fontStyle:"italic",lineHeight:1.6}}>
-              <p style={{margin:"0 0 0.4rem",fontWeight:700,color:"#854d0e",fontSize:"0.75rem"}}>📝 MODEL ANSWER</p>
+          {/* Reveal buttons */}
+          <div style={{display:"flex",gap:"0.75rem"}}>
+            <button onClick={()=>setShowModel(!showModel)}
+              style={{flex:1,padding:"0.75rem",borderRadius:"0.75rem",fontWeight:700,color:"white",background:p.bg,border:"none",fontSize:"0.95rem"}}>
+              {showModel?"🙈 Hide Model Answer":"👁️ Show Model Answer"}
+            </button>
+            <button onClick={()=>setShowBreakdown(!showBreakdown)}
+              style={{flex:1,padding:"0.75rem",borderRadius:"0.75rem",fontWeight:700,color:p.text,background:p.light,border:`2px solid ${p.border}`,fontSize:"0.95rem"}}>
+              {showBreakdown?"Hide Breakdown":"🔍 See Breakdown"}
+            </button>
+          </div>
+
+          {/* Print button */}
+          {text.trim().length>0&&(
+            <button onClick={()=>handlePrint(sc,text,wc,checks)}
+              style={{width:"100%",padding:"0.75rem",borderRadius:"0.75rem",fontWeight:700,color:"#374151",background:"#f8fafc",border:"2px solid #e2e8f0",fontSize:"0.95rem",display:"flex",alignItems:"center",justifyContent:"center",gap:"0.5rem"}}>
+              🖨️ Print My Answer &amp; Model
+            </button>
+          )}
+
+          {/* Model answer */}
+          {showModel&&(
+            <div style={{background:"#fefce8",border:"2px solid #fde047",borderRadius:"0.75rem",padding:"1rem",fontSize:"0.9rem",lineHeight:1.7,color:"#374151"}}>
+              <p style={{fontWeight:700,color:"#854d0e",fontSize:"0.75rem",marginBottom:"0.4rem"}}>📝 MODEL ANSWER</p>
               {sc.model}
             </div>
           )}
 
-          {/* Feedback */}
-          {feedback && !feedback.error && (
-            <div style={{display:"flex",flexDirection:"column",gap:"0.75rem",borderTop:"2px solid #f3f4f6",paddingTop:"1rem"}}>
-              {/* Score row */}
-              <div style={{display:"flex",alignItems:"center",gap:"1rem"}}>
-                <div style={{width:"4.5rem",height:"4.5rem",borderRadius:"50%",background:feedback.score>=80?"#4ade80":feedback.score>=60?"#fb923c":"#f87171",display:"flex",alignItems:"center",justifyContent:"center",color:"white",fontWeight:900,fontSize:"1.5rem",flexShrink:0}}>{feedback.score}</div>
-                <div>
-                  <p style={{margin:"0 0 0.3rem",fontWeight:700,color:"#1f2937",fontSize:"1.1rem"}}>{feedback.grade}</p>
-                  <div style={{display:"flex",flexWrap:"wrap",gap:"0.35rem"}}>
-                    {[[feedback.has_hook,"Hook"],[feedback.announcement_type_correct,"Correct type"],[feedback.appeal_correct,`Appeal: ${feedback.appeal_used}`],[feedback.word_count_ok,"Word count"]].map(([ok,label])=>(
-                      <span key={label} style={{fontSize:"0.7rem",fontWeight:700,padding:"0.15rem 0.5rem",borderRadius:"999px",background:ok?"#dcfce7":"#fee2e2",color:ok?"#166534":"#991b1b"}}>{ok?"✓":"✗"} {label}</span>
-                    ))}
-                  </div>
+          {/* Breakdown */}
+          {showBreakdown&&(
+            <div style={{background:p.light,border:`2px solid ${p.border}`,borderRadius:"0.75rem",padding:"1rem"}}>
+              <p style={{fontWeight:700,color:p.text,fontSize:"0.875rem",marginBottom:"0.6rem"}}>🔍 Why this model answer works</p>
+              {sc.breakdown.map((b,i)=>(
+                <div key={i} style={{marginBottom:"0.5rem",padding:"0.6rem 0.75rem",background:"white",borderRadius:"0.5rem",border:`1px solid ${p.border}`}}>
+                  <span style={{fontWeight:700,color:p.text,fontSize:"0.8rem"}}>{b.label}: </span>
+                  <span style={{fontSize:"0.8rem",color:"#4b5563"}}>{b.note}</span>
                 </div>
-              </div>
-              {/* Hook */}
-              {feedback.hook_comment && <div style={{padding:"0.75rem 1rem",borderRadius:"0.75rem",background:feedback.has_hook?"#f0fdf4":"#fff7ed",border:feedback.has_hook?"1px solid #bbf7d0":"1px solid #fed7aa",color:feedback.has_hook?"#166534":"#9a3412",fontSize:"0.875rem"}}><strong>🪝 Hook: </strong>{feedback.hook_comment}</div>}
-              {/* Appeal */}
-              {feedback.appeal_comment && <div style={{padding:"0.75rem 1rem",borderRadius:"0.75rem",background:feedback.appeal_correct?"#f0fdf4":"#fff7ed",border:feedback.appeal_correct?"1px solid #bbf7d0":"1px solid #fed7aa",color:feedback.appeal_correct?"#166534":"#9a3412",fontSize:"0.875rem"}}><strong>🎭 Appeal: </strong>{feedback.appeal_comment}</div>}
-              {/* Strengths */}
-              <div style={{background:"#f0fdf4",border:"1px solid #bbf7d0",borderRadius:"0.75rem",padding:"0.9rem 1rem"}}>
-                <p style={{margin:"0 0 0.4rem",fontWeight:700,color:"#15803d",fontSize:"0.875rem"}}>💪 Strengths</p>
-                {feedback.strengths?.map((s,i)=><div key={i} style={{display:"flex",gap:"0.5rem",fontSize:"0.875rem",color:"#374151",marginBottom:"0.2rem"}}><span style={{color:"#22c55e",flexShrink:0}}>✓</span>{s}</div>)}
-              </div>
-              {/* Improvements */}
-              <div style={{background:"#fff7ed",border:"1px solid #fed7aa",borderRadius:"0.75rem",padding:"0.9rem 1rem"}}>
-                <p style={{margin:"0 0 0.4rem",fontWeight:700,color:"#c2410c",fontSize:"0.875rem"}}>🔧 Suggestions</p>
-                {feedback.improvements?.map((s,i)=><div key={i} style={{display:"flex",gap:"0.5rem",fontSize:"0.875rem",color:"#374151",marginBottom:"0.2rem"}}><span style={{color:"#f97316",flexShrink:0}}>→</span>{s}</div>)}
-              </div>
-              {/* Revised */}
-              {feedback.revised_example && (
-                <div style={{background:"#f5f3ff",border:"1px solid #ddd6fe",borderRadius:"0.75rem",padding:"0.9rem 1rem"}}>
-                  <p style={{margin:"0 0 0.4rem",fontWeight:700,color:"#6d28d9",fontSize:"0.875rem"}}>✨ How it could look</p>
-                  <p style={{margin:0,fontSize:"0.875rem",color:"#374151",fontStyle:"italic",lineHeight:1.6}}>{feedback.revised_example}</p>
-                </div>
-              )}
+              ))}
             </div>
           )}
-          {feedback?.error && <div style={{background:"#fef2f2",border:"1px solid #fecaca",borderRadius:"0.75rem",padding:"0.75rem 1rem",color:"#dc2626",fontSize:"0.875rem"}}>{feedback.error}</div>}
         </>
       )}
     </div>
@@ -423,34 +582,30 @@ function CreateSection() {
 /* ── APP ───────────────────────────────────────────────────────────── */
 function App() {
   const [tab, setTab] = useState("learn");
-  const tabs = [{id:"learn",label:"📚 Learn",color:"purple"},{id:"practice",label:"🎯 Practice",color:"teal"},{id:"create",label:"✍️ Create",color:"pink"}];
+  const tabs=[{id:"learn",label:"📚 Learn",color:"purple"},{id:"practice",label:"🎯 Practice",color:"teal"},{id:"create",label:"✍️ Create",color:"pink"}];
   return (
-    <div style={{minHeight:"100vh",paddingBottom:"2.5rem"}}>
-      {/* Header */}
+    <div>
       <div style={{background:"linear-gradient(to right,#7c3aed,#db2777)",color:"white",padding:"2rem 1.25rem 4rem",textAlign:"center",boxShadow:"0 4px 12px rgba(0,0,0,0.15)"}}>
         <p style={{margin:"0 0 0.25rem",fontSize:"0.7rem",textTransform:"uppercase",letterSpacing:"0.12em",color:"#e9d5ff"}}>LSC 1103 · Interactive Lab</p>
         <h1 style={{margin:"0 0 0.25rem",fontSize:"1.5rem",fontWeight:900}}>Social Media Communication</h1>
         <p style={{margin:0,fontSize:"0.85rem",color:"#f3e8ff"}}>Purpose · Announcement Types · Hooks · Appeals · Writing</p>
       </div>
-      {/* Card */}
       <div style={{maxWidth:"38rem",margin:"-2rem auto 0",padding:"0 1rem"}}>
         <div style={{background:"white",borderRadius:"1.5rem",boxShadow:"0 8px 32px rgba(0,0,0,0.12)",overflow:"hidden"}}>
-          {/* Tabs */}
           <div style={{display:"flex",borderBottom:"2px solid #f3f4f6"}}>
             {tabs.map(t=>{
               const tp=PAL[t.color]; const active=tab===t.id;
               return (
-                <button key={t.id} onClick={()=>setTab(t.id)} style={{flex:1,padding:"0.75rem",fontWeight:700,fontSize:"0.875rem",border:"none",background:"transparent",color:active?tp.text:"#9ca3af",borderBottom:active?`2px solid ${tp.bg}`:"2px solid transparent",marginBottom:"-2px",cursor:"pointer"}}>
+                <button key={t.id} onClick={()=>setTab(t.id)} style={{flex:1,padding:"0.75rem",fontWeight:700,fontSize:"0.875rem",border:"none",borderBottom:active?`2px solid ${tp.bg}`:"2px solid transparent",marginBottom:"-2px",background:"transparent",color:active?tp.text:"#9ca3af"}}>
                   {t.label}
                 </button>
               );
             })}
           </div>
-          {/* Content */}
           <div style={{padding:"1.25rem"}}>
-            {tab==="learn" && <LearnSection/>}
-            {tab==="practice" && <PracticeSection/>}
-            {tab==="create" && <CreateSection/>}
+            {tab==="learn"&&<LearnSection/>}
+            {tab==="practice"&&<PracticeSection/>}
+            {tab==="create"&&<CreateSection/>}
           </div>
         </div>
       </div>
