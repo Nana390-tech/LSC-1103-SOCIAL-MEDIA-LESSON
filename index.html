@@ -6,47 +6,63 @@
 <title>LSC 1103 – Social Media Communication Lab</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#ede9fe,#fdf2f8,#f0fdfa);min-height:100vh;padding-bottom:2.5rem;}
-button{cursor:pointer;font-family:inherit;transition:opacity 0.15s;}
-button:hover{opacity:0.88;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#ede9fe 0%,#fdf2f8 50%,#f0fdfa 100%);min-height:100vh;padding-bottom:2.5rem;}
+button{cursor:pointer;font-family:inherit;transition:all 0.18s;}
 textarea{font-family:inherit;outline:none;}
-input[type=checkbox]{cursor:pointer;}
 
-/* layout */
-.header{background:linear-gradient(to right,#7c3aed,#db2777);color:white;padding:2rem 1.25rem 4rem;text-align:center;}
-.header p{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:#e9d5ff;margin-bottom:.25rem;}
-.header h1{font-size:1.5rem;font-weight:900;margin-bottom:.25rem;}
-.header small{font-size:.85rem;color:#f3e8ff;}
-.card{background:white;border-radius:1.5rem;box-shadow:0 8px 32px rgba(0,0,0,.12);overflow:hidden;max-width:38rem;margin:-2rem auto 0;padding:0 1rem;}
-.tabs{display:flex;border-bottom:2px solid #f3f4f6;}
-.tab-btn{flex:1;padding:.75rem;font-weight:700;font-size:.875rem;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;background:transparent;color:#9ca3af;}
-.tab-btn.active{color:#6d28d9;border-bottom-color:#7c3aed;}
-.tab-content{padding:1.25rem;display:none;}
+/* ── HEADER ── */
+.header{background:linear-gradient(135deg,#6d28d9,#9333ea,#db2777);color:white;padding:2rem 1.25rem 4.5rem;text-align:center;position:relative;overflow:hidden;}
+.header::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+.header-float{position:absolute;opacity:.12;font-size:2.5rem;animation:float 6s ease-in-out infinite;}
+.header-float:nth-child(2){top:10%;left:5%;animation-delay:0s;}
+.header-float:nth-child(3){top:20%;right:8%;animation-delay:2s;}
+.header-float:nth-child(4){bottom:25%;left:12%;animation-delay:4s;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.header-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.15em;color:#e9d5ff;margin-bottom:.3rem;position:relative;}
+.header h1{font-size:1.6rem;font-weight:900;margin-bottom:.3rem;position:relative;text-shadow:0 2px 8px rgba(0,0,0,.2);}
+.header small{font-size:.82rem;color:#f3e8ff;position:relative;}
+.header-wave{position:absolute;bottom:0;left:0;right:0;height:2rem;background:transparent;}
+
+/* ── CARD ── */
+.card{background:white;border-radius:1.5rem;box-shadow:0 8px 40px rgba(109,40,217,.15);overflow:hidden;max-width:38rem;margin:-2.5rem auto 0;position:relative;}
+.card::before{content:'';display:block;height:4px;background:linear-gradient(to right,#7c3aed,#a855f7,#ec4899,#f97316);}
+
+/* ── STUDENT BAR ── */
+.student-bar{display:flex;gap:.5rem;padding:.7rem 1rem .5rem;background:linear-gradient(to right,#f5f3ff,#fdf2f8);border-bottom:1px solid #ede9fe;}
+.s-input{flex:1;border:1.5px solid #ddd6fe;border-radius:.6rem;padding:.45rem .75rem;font-size:.78rem;color:#374151;outline:none;transition:border-color .2s;background:white;}
+.s-input:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.1);}
+.s-input::placeholder{color:#c4b5fd;}
+
+/* ── TABS ── */
+.tabs{display:flex;border-bottom:2px solid #f3f4f6;margin:0;padding:0 .25rem;}
+.tab-btn{flex:1;padding:.65rem .25rem;font-weight:700;font-size:.76rem;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;background:transparent;color:#9ca3af;border-radius:.5rem .5rem 0 0;transition:all .2s;}
+.tab-btn:hover{background:#f5f3ff;color:#7c3aed;}
+.tab-btn.active{color:#6d28d9;border-bottom-color:#7c3aed;background:#faf5ff;}
+.tab-content{display:none;padding:.25rem 1rem .5rem;}
 .tab-content.active{display:block;}
 
-/* accordion */
-.acc-group{border-radius:1rem;border:2px solid #ddd6fe;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:1.25rem;}
-.acc-header{color:white;padding:.75rem 1.25rem;font-weight:700;font-size:1rem;}
-.acc-item{border-top:1px solid #ddd6fe;}
-.acc-item:first-of-type{border-top:none;}
-.acc-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.25rem;background:transparent;border:none;text-align:left;font-size:.875rem;font-weight:600;}
-.acc-chevron{transition:transform .2s;font-size:1.2rem;color:#9ca3af;}
-.acc-body{display:none;padding:0 1.25rem .9rem;flex-direction:column;gap:.5rem;}
-.acc-body.open{display:flex;}
-.acc-def{color:#374151;font-size:.875rem;}
+/* ── ACCORDION ── */
+.acc-group{border-radius:1rem;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:1.25rem;border:2px solid #ddd6fe;}
+.acc-head{color:white;padding:.75rem 1.25rem;font-weight:700;font-size:1rem;}
+.acc-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.25rem;background:transparent;border:none;text-align:left;font-size:.875rem;font-weight:600;transition:background .15s;}
+.acc-trigger:hover{background:rgba(0,0,0,.03);}
+.acc-chev{transition:transform .25s;font-size:1.2rem;color:#9ca3af;display:inline-block;}
+.acc-body{display:none;padding:0 1.25rem .9rem;animation:slideDown .2s ease;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+.acc-body.open{display:block;}
+.acc-def{color:#374151;font-size:.875rem;margin-bottom:.4rem;}
 .acc-ex{font-size:.75rem;font-style:italic;padding:.5rem .75rem;border-radius:.5rem;}
-
-/* table */
+.badge{font-size:.7rem;font-weight:700;padding:.1rem .5rem;border-radius:999px;display:inline-block;}
 .ref-table{width:100%;border-collapse:collapse;font-size:.875rem;}
 .ref-table th{padding:.5rem .75rem;text-align:left;font-weight:700;}
 .ref-table td{padding:.5rem .75rem;}
-.ref-table tr{border-top:1px solid #e0e7ff;}
 
-/* quiz */
-.progress-bar-bg{background:#e5e7eb;border-radius:999px;height:.5rem;margin-bottom:1rem;}
-.progress-bar{height:.5rem;border-radius:999px;transition:width .3s;}
-.q-box{border-radius:1rem;padding:1.1rem 1.25rem;margin-bottom:1rem;}
-.opt-btn{width:100%;text-align:left;padding:.75rem 1.1rem;border-radius:.75rem;border:2px solid #e5e7eb;background:white;color:#374151;display:flex;align-items:center;gap:.75rem;font-weight:500;font-size:.875rem;margin-bottom:.6rem;}
+/* ── QUIZ ── */
+.progress-bar-bg{background:#e5e7eb;border-radius:999px;height:.45rem;margin-bottom:1rem;}
+.progress-bar{height:.45rem;border-radius:999px;transition:width .4s ease;}
+.q-box{border-radius:1rem;padding:1.1rem 1.25rem;margin-bottom:1rem;border:2px solid;}
+.opt-btn{width:100%;text-align:left;padding:.75rem 1.1rem;border-radius:.75rem;border:2px solid #e5e7eb;background:white;color:#374151;display:flex;align-items:center;gap:.75rem;font-weight:500;font-size:.875rem;margin-bottom:.6rem;transition:all .15s;}
+.opt-btn:hover:not(:disabled){border-color:#a78bfa;background:#faf5ff;}
 .opt-btn.correct{border-color:#4ade80;background:#f0fdf4;color:#166534;}
 .opt-btn.wrong{border-color:#f87171;background:#fef2f2;color:#991b1b;}
 .opt-btn.faded{border-color:#e5e7eb;background:#f9fafb;color:#9ca3af;}
@@ -54,47 +70,61 @@ input[type=checkbox]{cursor:pointer;}
 .fb-box{padding:.75rem 1rem;border-radius:.75rem;font-weight:500;font-size:.875rem;margin-bottom:1rem;}
 .fb-ok{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;}
 .fb-bad{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;}
-.next-btn{width:100%;padding:.75rem;border-radius:.75rem;font-weight:700;color:white;border:none;font-size:1rem;}
-.badge{font-size:.7rem;font-weight:700;padding:.1rem .5rem;border-radius:999px;display:inline-block;}
+.next-btn{width:100%;padding:.75rem;border-radius:.75rem;font-weight:700;color:white;border:none;font-size:1rem;transition:opacity .15s;}
+.next-btn:hover{opacity:.88;}
 .cat-badge{font-size:.75rem;font-weight:700;padding:.2rem .75rem;border-radius:999px;}
-.score-circle{width:5rem;height:5rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:900;color:white;flex-shrink:0;}
-.hist-dots{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;max-width:18rem;margin:.5rem auto;}
-.hist-dot{width:2.2rem;height:2.2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:.75rem;}
+.hist-dot{width:2rem;height:2rem;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:.7rem;margin:.2rem;}
 
-/* create */
-.scenario-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem;}
-.sc-btn{padding:.75rem;border-radius:.75rem;border:2px solid #e5e7eb;background:white;text-align:left;font-size:.875rem;}
-.sc-btn.selected{box-shadow:0 0 0 3px rgba(124,58,237,.3);}
-.sc-emoji{font-size:1.5rem;margin-bottom:.25rem;}
-.sc-name{font-weight:700;font-size:.875rem;}
-.brief-box{border-radius:1rem;padding:1rem;margin-bottom:1rem;}
+/* ── CREATE ── */
+.sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem;}
+.sc-btn{padding:.75rem;border-radius:.75rem;border:2px solid #e5e7eb;background:white;text-align:left;font-size:.875rem;transition:all .2s;}
+.sc-btn:hover{border-color:#a78bfa;box-shadow:0 2px 8px rgba(124,58,237,.12);}
 .brief-row{display:flex;gap:.5rem;margin-bottom:.25rem;font-size:.875rem;}
 .brief-label{color:#6b7280;min-width:5.5rem;flex-shrink:0;}
 .brief-val{font-weight:600;color:#1f2937;}
-.tip-text{margin-top:.5rem;font-size:.75rem;color:#6b7280;font-style:italic;}
 .wc-badge{font-size:.75rem;font-weight:700;padding:.2rem .6rem;border-radius:999px;}
 .wc-ok{background:#ccfbf1;color:#0f766e;}
 .wc-bad{background:#fee2e2;color:#dc2626;}
 .wc-neutral{background:#f3f4f6;color:#6b7280;}
-textarea.post-area{width:100%;border:2px solid #e5e7eb;border-radius:.75rem;padding:.9rem;font-size:.875rem;line-height:1.6;resize:none;color:#1f2937;display:block;}
+.post-area{width:100%;border:2px solid #e5e7eb;border-radius:.75rem;padding:.9rem;font-size:.875rem;line-height:1.6;resize:none;color:#1f2937;display:block;transition:border-color .2s;}
+.post-area:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.1);}
 .check-list{background:#f8fafc;border:2px solid #e2e8f0;border-radius:1rem;padding:1rem;margin-bottom:1rem;}
-.check-item{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;font-size:.875rem;color:#374151;}
+.check-item{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;font-size:.875rem;color:#374151;cursor:pointer;}
 .action-row{display:flex;gap:.75rem;margin-bottom:.75rem;}
-.action-btn{flex:1;padding:.75rem;border-radius:.75rem;font-weight:700;font-size:.875rem;border:none;}
+.action-btn{flex:1;padding:.75rem;border-radius:.75rem;font-weight:700;font-size:.875rem;border:none;transition:opacity .15s;}
+.action-btn:hover{opacity:.88;}
 .model-box{background:#fefce8;border:2px solid #fde047;border-radius:.75rem;padding:1rem;font-size:.9rem;line-height:1.7;color:#374151;margin-bottom:.75rem;display:none;}
-.breakdown-box{border-radius:.75rem;padding:1rem;margin-bottom:.75rem;display:none;}
-.breakdown-item{padding:.5rem .75rem;border-radius:.4rem;margin-bottom:.4rem;font-size:.8rem;}
-.print-btn{width:100%;padding:.75rem;border-radius:.75rem;font-weight:700;color:#374151;background:#f8fafc;border:2px solid #e2e8f0;font-size:.875rem;display:none;}
-.hidden{display:none;}
+.breakdown-box{border-radius:.75rem;padding:1rem;margin-bottom:.75rem;display:none;border:2px solid;}
+.breakdown-item{padding:.5rem .75rem;border-radius:.4rem;margin-bottom:.4rem;font-size:.8rem;border:1px solid #e0e7ff;background:white;}
+.print-btn{width:100%;padding:.75rem;border-radius:.75rem;font-weight:700;color:#374151;background:#f8fafc;border:2px solid #e2e8f0;font-size:.875rem;margin-bottom:.75rem;transition:all .15s;}
+.print-btn:hover{background:#f0f0ff;border-color:#a78bfa;}
 
-/* result screen */
-.result-screen{text-align:center;padding:2rem 0;}
-.result-pct{font-size:3.5rem;font-weight:900;margin-bottom:.5rem;}
-.result-title{font-size:1.4rem;font-weight:700;color:#1f2937;margin-bottom:.25rem;}
-.result-sub{color:#6b7280;margin-bottom:1rem;}
-.restart-btn{background:#7c3aed;color:white;font-weight:700;padding:.75rem 2rem;border-radius:.75rem;border:none;font-size:1rem;}
+/* ── GLOSSARY ── */
+.g-search{width:100%;border:2px solid #ddd6fe;border-radius:.75rem;padding:.65rem 1rem;font-size:.875rem;outline:none;transition:all .2s;background:#faf5ff;}
+.g-search:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.1);}
+.cat-pills{display:flex;flex-wrap:wrap;gap:.35rem;margin:.75rem 0;}
+.cat-pill{padding:.3rem .75rem;border-radius:999px;border:1.5px solid #ddd6fe;background:white;font-size:.72rem;font-weight:700;color:#7c3aed;cursor:pointer;transition:all .18s;}
+.cat-pill:hover,.cat-pill.active{background:#7c3aed;color:white;border-color:#7c3aed;}
+.g-card{border-radius:1rem;overflow:hidden;margin-bottom:.65rem;border:2px solid;transition:box-shadow .2s;}
+.g-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);}
+.g-card-inner{display:flex;}
+.g-en{padding:.75rem 1rem;flex:1;border-right:2px solid rgba(0,0,0,.06);}
+.g-ar{padding:.75rem 1rem;flex:1;text-align:right;direction:rtl;}
+.g-cat{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.2rem;}
+.g-term{font-weight:800;font-size:.95rem;color:#1f2937;margin-bottom:.15rem;}
+.g-def{font-size:.72rem;color:#6b7280;line-height:1.4;}
+.g-empty{text-align:center;color:#9ca3af;padding:2.5rem 1rem;font-size:.875rem;}
 
-/* colours */
+/* ── RESULT ── */
+.result-wrap{text-align:center;padding:1.5rem 0;}
+.result-pct{font-size:4rem;font-weight:900;background:linear-gradient(135deg,#7c3aed,#db2777);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.result-label{font-size:1.3rem;font-weight:700;color:#1f2937;margin:.5rem 0 .25rem;}
+.cert-btn{width:100%;padding:.9rem;border-radius:.75rem;font-weight:800;font-size:1rem;border:none;background:linear-gradient(to right,#7c3aed,#db2777);color:white;margin-bottom:.65rem;box-shadow:0 4px 16px rgba(124,58,237,.3);}
+.cert-btn:hover{opacity:.9;box-shadow:0 6px 20px rgba(124,58,237,.4);}
+.retry-btn{width:100%;padding:.75rem;border-radius:.75rem;font-weight:700;color:#6d28d9;background:#f5f3ff;border:2px solid #ddd6fe;font-size:.95rem;}
+.retry-btn:hover{background:#ede9fe;}
+
+/* ── COLOUR UTILITIES ── */
 .purple-bg{background:#7c3aed;} .purple-lt{background:#f5f3ff;} .purple-br{border-color:#ddd6fe;} .purple-tx{color:#6d28d9;} .purple-bx{background:#ede9fe;color:#6d28d9;}
 .indigo-bg{background:#4338ca;} .indigo-lt{background:#eef2ff;} .indigo-br{border-color:#c7d2fe;} .indigo-tx{color:#4338ca;} .indigo-bx{background:#e0e7ff;color:#4338ca;}
 .cyan-bg{background:#0891b2;}   .cyan-lt{background:#ecfeff;}   .cyan-br{border-color:#a5f3fc;}   .cyan-tx{color:#0e7490;}   .cyan-bx{background:#cffafe;color:#0e7490;}
@@ -106,43 +136,53 @@ textarea.post-area{width:100%;border:2px solid #e5e7eb;border-radius:.75rem;padd
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
-  <p>LSC 1103 · Interactive Lab</p>
+  <span class="header-float">📱</span>
+  <span class="header-float">✍️</span>
+  <span class="header-float">🎯</span>
+  <p class="header-label">LSC 1103 · Interactive Lab</p>
   <h1>Social Media Communication</h1>
   <small>Purpose · Announcement Types · Hooks · Appeals · Writing</small>
 </div>
 
-<!-- MAIN CARD -->
 <div class="card">
+  <!-- Student Info Bar -->
+  <div class="student-bar">
+    <input type="text" id="sname" class="s-input" placeholder="👤 Your Full Name">
+    <input type="text" id="sid" class="s-input" placeholder="🆔 Student ID">
+  </div>
+
+  <!-- Tabs -->
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('learn',this)">📚 Learn</button>
     <button class="tab-btn" onclick="switchTab('practice',this)">🎯 Practice</button>
     <button class="tab-btn" onclick="switchTab('create',this)">✍️ Create</button>
+    <button class="tab-btn" onclick="switchTab('glossary',this)">🌐 Glossary</button>
   </div>
 
-  <!-- ═══ LEARN ════════════════════════════════════════════════════ -->
   <div id="tab-learn" class="tab-content active"></div>
 
-  <!-- ═══ PRACTICE ════════════════════════════════════════════════ -->
   <div id="tab-practice" class="tab-content">
     <div id="quiz-area"></div>
   </div>
 
-  <!-- ═══ CREATE ══════════════════════════════════════════════════ -->
   <div id="tab-create" class="tab-content">
     <p style="font-size:.875rem;font-weight:600;color:#4b5563;margin-bottom:.75rem;">Choose a scenario to write about:</p>
-    <div class="scenario-grid" id="scenario-grid"></div>
-    <div id="scenario-detail" class="hidden"></div>
+    <div class="sc-grid" id="sc-grid"></div>
+    <div id="sc-detail"></div>
+  </div>
+
+  <div id="tab-glossary" class="tab-content">
+    <div id="glossary-area"></div>
   </div>
 </div>
 
 <script>
-/* ═══════════════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════
    DATA
-═══════════════════════════════════════════════════════════════════ */
-const concepts = [
-  { group:"📣 Purposes of Social Media Posts", color:"purple", items:[
+═══════════════════════════════════════════════════ */
+const concepts=[
+  {group:"📣 Purposes of Social Media Posts",color:"purple",items:[
     {term:"To Inform",icon:"ℹ️",def:"Share facts or knowledge clearly. Answers What? When? Where? Why?",ex:'"Our new opening hours are from 9 AM to 5 PM starting tomorrow."'},
     {term:"To Advertise",icon:"🛒",def:"Promote a product or service. Highlights features, discounts, or benefits.",ex:'"Buy one, get one free! Limited offer on our skincare range."'},
     {term:"To Announce",icon:"📢",def:"Share important updates — new hires, launches, or events.",ex:'"We are thrilled to announce the launch of our new mobile app next week!"'},
@@ -150,7 +190,7 @@ const concepts = [
     {term:"To Call for Action",icon:"🙋",def:"Encourage immediate action — sign up, buy, or join.",ex:'"Register today for our webinar and get a free e-book!"'},
     {term:"To Persuade",icon:"💡",def:"Change minds or influence decisions using emotional or logical appeals.",ex:'"Switch to eco-friendly products today to help protect the environment."'},
   ]},
-  { group:"📋 7 Types of Announcements", color:"indigo", items:[
+  {group:"📋 7 Types of Announcements",color:"indigo",items:[
     {term:"Product Launch",abbr:"PL",icon:"🚀",def:"Announces a new product or service available for the first time.",ex:'"Totally new, totally you. The iPhone 20 — available now at Apple Stores worldwide."'},
     {term:"Company News",abbr:"CN",icon:"🏢",def:"Shares internal updates, policy changes, or general business news.",ex:'"Office hours are changing during Ramadan. Please check our updated schedule."'},
     {term:"Upcoming Event",abbr:"UE",icon:"📅",def:"Informs the audience about an event that will happen in the future.",ex:'"What\'s up? Come see at the Tech Festival — this Friday, 4–9 PM!"'},
@@ -159,8 +199,8 @@ const concepts = [
     {term:"Partnerships & Collaborations",abbr:"PC",icon:"🤝",def:"Announces a new relationship or joint venture between two organisations.",ex:'"HSBC & Amazon now work together for you — easier payments, better rewards."'},
     {term:"Hiring Notices",abbr:"HN",icon:"💼",def:"Advertises job openings or calls for applications within the organisation.",ex:'"Jobs, jobs, jobs! Visit Careers For You today and find your perfect role."'},
   ]},
-  { group:"🪝 Hooks — Engaging Opening Lines", color:"cyan", items:[
-    {term:"What is a Hook?",icon:"🎣",def:"A hook is the first sentence of a post designed to grab the reader's attention immediately.",ex:'"Totally new, totally you." — far more engaging than "We have a new product."'},
+  {group:"🪝 Hooks — Engaging Opening Lines",color:"cyan",items:[
+    {term:"What is a Hook?",icon:"🎣",def:"The first sentence designed to grab attention immediately. A good hook makes people want to keep reading.",ex:'"Totally new, totally you." — far more engaging than "We have a new product."'},
     {term:"Hook for Product Launch",icon:"🚀",def:"Tease the product's novelty. Use short, punchy sentences.",ex:'"Totally new, totally you. The iPhone 20."'},
     {term:"Hook for Upcoming Event",icon:"📅",def:"Create curiosity or excitement. Use questions or energy.",ex:'"What\'s up? Come see at the Tech Festival."'},
     {term:"Hook for Sales & Promotions",icon:"🏷️",def:"Lead with the offer. Make the benefit immediately obvious.",ex:'"Bring a friend. Buy one meal, get one free."'},
@@ -169,19 +209,19 @@ const concepts = [
     {term:"Hook for Hiring Notices",icon:"💼",def:"Create urgency and excitement. Repetition and action words work well.",ex:'"Jobs, jobs, jobs! Visit Careers For You today."'},
     {term:"Hook for Company News",icon:"🏢",def:"Be clear and direct. Audiences need to know this is important.",ex:'"Office hours are changing during Ramadan."'},
   ]},
-  { group:"🎭 Rhetorical Appeals", color:"teal", items:[
-    {term:"Logos",icon:"📊",def:"Logic, data, and facts. Use numbers, statistics, and specific figures. Look for: percentages, times, quantities, research results.",ex:'"Studies show that 90% of people who exercise daily experience improved mental health."'},
-    {term:"Ethos",icon:"🏅",def:"Credibility and trust. The writer shows expertise, qualifications, or authority. Look for: job titles, years of experience, certifications.",ex:'"As a certified nutritionist with 10 years\' experience, I recommend more vegetables in your diet."'},
-    {term:"Pathos",icon:"❤️",def:"Emotion and feelings. Connects with the audience\'s heart — joy, fear, sympathy. Look for: emotional language, personal stories, values.",ex:'"Think of the joy a rescued pet will bring into your home. Adopt today and save a life."'},
+  {group:"🎭 Rhetorical Appeals",color:"teal",items:[
+    {term:"Logos",icon:"📊",def:"Logic, data, and facts. Use numbers, statistics, and specific figures.",ex:'"Studies show that 90% of people who exercise daily experience improved mental health."'},
+    {term:"Ethos",icon:"🏅",def:"Credibility and trust. The writer shows expertise, qualifications, or authority.",ex:'"As a certified nutritionist with 10 years\' experience, I recommend more vegetables."'},
+    {term:"Pathos",icon:"❤️",def:"Emotion and feelings. Connects with the audience\'s heart — joy, fear, sympathy.",ex:'"Think of the joy a rescued pet will bring into your home. Adopt today and save a life."'},
   ]},
-  { group:"🔍 Key Elements of a Post", color:"orange", items:[
+  {group:"🔍 Key Elements of a Post",color:"orange",items:[
     {term:"Writer",icon:"✍️",def:"The person or organization creating the post.",ex:'"I am launching a 30-day fitness challenge" → Writer is a fitness coach.'},
     {term:"Audience",icon:"👥",def:"The specific group the post is directed towards.",ex:'"Attention all fitness enthusiasts!" → Audience = fitness lovers.'},
     {term:"Message",icon:"💬",def:"The main information or ideas being shared.",ex:'"Our new app is available for download" → the core message.'},
     {term:"Purpose",icon:"🎯",def:"The goal or reason behind the post.",ex:'"Sign up now" → Purpose = Call for Action.'},
     {term:"Context & Culture",icon:"🌍",def:"Background, trends, or societal factors influencing the post.",ex:'"During the holidays" → The time and setting shape the post\'s meaning.'},
   ]},
-  { group:"✅ Features of a Good Post", color:"pink", items:[
+  {group:"✅ Features of a Good Post",color:"pink",items:[
     {term:"Clarity",icon:"🔍",def:"Easy to understand. Avoid complex language or jargon.",ex:'"Our store is closed on Friday for maintenance."'},
     {term:"Conciseness",icon:"✂️",def:"Brief and to the point. No unnecessary words.",ex:'"50% off all items. Sale ends Sunday."'},
     {term:"Professionalism",icon:"👔",def:"Reflects the tone of the brand. Accurate and respectful.",ex:'"We value your privacy and will never ask for your password."'},
@@ -190,7 +230,7 @@ const concepts = [
   ]},
 ];
 
-const questions = [
+const questions=[
   {cat:"Announcement Type",q:'"The university wants to find more qualified teaching staff. Apply now at hct.ac.ae/careers"',opts:["Product Launch","Hiring Notice","Company News","Milestones & Achievements"],ans:1},
   {cat:"Announcement Type",q:'"Baskin Robbins introduces 5 brand-new ice cream flavours this summer. Try them all!"',opts:["Sales & Promotions","Milestones & Achievements","Product Launch","Upcoming Event"],ans:2},
   {cat:"Announcement Type",q:"\"McDonald's sold 1 billion hamburgers worldwide. Thank you for being part of the journey!\"",opts:["Company News","Milestones & Achievements","Product Launch","Partnerships & Collaborations"],ans:1},
@@ -221,7 +261,7 @@ const questions = [
   {cat:"Post Quality",q:"\"Get 20% off all items tomorrow. Join us for live music. We're also launching a new product!\" — What's wrong?",opts:["Lack of professionalism","Lack of engagement","Lack of clarity","Lack of structure"],ans:3},
 ];
 
-const checklist = [
+const checklist=[
   {id:"hook",label:"I started with a strong hook"},
   {id:"type",label:"My post matches the announcement type"},
   {id:"appeal",label:"I used the correct rhetorical appeal"},
@@ -231,441 +271,494 @@ const checklist = [
   {id:"professional",label:"My language is professional and clear"},
 ];
 
-const scenarios = [
-  {id:1,emoji:"📡",title:"IT Services Alert",color:"blue",
-   type:"Company News (CN)",appeal:"Logos (logic + facts)",writer:"IT Services Department",audience:"All campus users",purpose:"To inform & reduce disruption",
-   context:"Sunday, 10:00–12:00 – planned campus network maintenance. Over 2,000 campus users will be affected.",
-   tip:"Logos = numbers & facts. Include exact times, duration (2 hours), number of users affected, and a clear alternative. No emotions — just precise information.",
-   model:"IT Services notice: Campus Wi-Fi will be offline Sunday 10:00–12:00 for scheduled maintenance. Over 2,000 users will be affected during this 2-hour window. To stay connected, use mobile data or visit the Library PCs. Service will return by 12:00. Thank you for your patience.",
-   breakdown:[
-     {label:"🪝 Hook",note:'"IT Services notice:" — clear, direct, professional opener.'},
-     {label:"📊 Logos",note:"Exact times (10:00–12:00), duration (2 hours), number of users (2,000) — all facts."},
-     {label:"🎯 Purpose",note:"Informs and reduces disruption with a practical alternative."},
-     {label:"✍️ Writer",note:"IT Services — formal, institutional voice used throughout."},
-   ]},
-  {id:2,emoji:"🌱",title:"Environmental Campaign",color:"teal",
-   type:"Upcoming Event (UE)",appeal:"Ethos (credibility + trust)",writer:"HCT Environmental Club",audience:"Students and staff on campus",purpose:"To persuade & call for action",
-   context:"World Environment Day – the club has organised a campus clean-up with 3 faculty supervisors and partnership with the UAE Ministry of Climate Change.",
-   tip:"Ethos = credibility. Mention the club's faculty support, the Ministry partnership, and the club's track record. Establish authority before making your appeal.",
-   model:"HCT Environmental Club, backed by 3 faculty supervisors and the UAE Ministry of Climate Change, invites you to our World Environment Day campus clean-up. Endorsed by experts and guided by professionals, this is your chance to make a real impact. Join us — our campus, our responsibility.",
-   breakdown:[
-     {label:"🪝 Hook",note:'"HCT Environmental Club, backed by 3 faculty supervisors…" — establishes credibility immediately.'},
-     {label:"🏅 Ethos",note:"Faculty endorsement, Ministry partnership — authority is established before the call to action."},
-     {label:"🎯 Purpose",note:"Persuades and calls students to join the event."},
-     {label:"👥 Audience",note:"Students and staff addressed directly with \"our campus, our responsibility.\""},
-   ]},
-  {id:3,emoji:"🏆",title:"HCT Competition Win",color:"orange",
-   type:"Milestones & Achievements (MA)",appeal:"Pathos (emotion + pride)",writer:"HCT Student Council",audience:"All HCT students and staff",purpose:"To announce & celebrate",
-   context:"HCT Abu Dhabi Men's College won 1st place at the UAE National Robotics Championship, beating 24 other colleges.",
-   tip:"Pathos = emotion. Use pride, celebration, and inclusive language ('we', 'our'). A strong hook that invites everyone to share the moment works perfectly here.",
-   model:"We did it! 🏆 HCT Abu Dhabi Men's College has won 1st place at the UAE National Robotics Championship, defeating 24 colleges across the country. This is YOUR victory — every student, every lecturer, every supporter made this possible. We are HCT. We are champions. Congratulations to our incredible team!",
-   breakdown:[
-     {label:"🪝 Hook",note:'"We did it! 🏆" — short, emotional, immediately celebratory.'},
-     {label:"❤️ Pathos",note:"Pride, celebration, inclusive 'we/our/your' language — emotionally connects the whole community."},
-     {label:"📋 Type",note:"Milestones & Achievements — celebrates a landmark victory with specific facts (1st place, 24 colleges)."},
-     {label:"👥 Audience",note:"All HCT addressed directly: \"every student, every lecturer, every supporter.\""},
-   ]},
-  {id:4,emoji:"⚠️",title:"Campus Safety Warning",color:"pink",
-   type:"Company News (CN)",appeal:"Logos (clear facts + statistics)",writer:"HCT Security Office",audience:"All campus community members",purpose:"To warn",
-   context:"In the past 2 weeks, 15 students reported receiving phishing emails asking for login credentials. 3 accounts were compromised.",
-   tip:"Logos = numbers & facts. Use the statistics (15 reports, 3 accounts, 2 weeks) to show the scale of the threat. Add a specific action step.",
-   model:"Security Alert: In the past 2 weeks, 15 students have reported phishing emails requesting HCT login credentials, resulting in 3 compromised accounts. Do NOT click suspicious links or share your password. Report any suspicious emails immediately to security@hct.ac.ae. Your account security is our priority.",
-   breakdown:[
-     {label:"🪝 Hook",note:'"Security Alert:" — direct and urgent without being emotional.'},
-     {label:"📊 Logos",note:"Three precise statistics: 2 weeks, 15 students, 3 compromised accounts — no exaggeration, just facts."},
-     {label:"🎯 Purpose",note:"Warns clearly and provides a specific action step (report to security@hct.ac.ae)."},
-     {label:"✍️ Writer",note:"HCT Security Office — formal, professional, authoritative tone throughout."},
-   ]},
-  {id:5,emoji:"🤝",title:"New Campus Partnership",color:"indigo",
-   type:"Partnerships & Collaborations (PC)",appeal:"Ethos (credibility + authority)",writer:"HCT Communications Office",audience:"Students, staff, and industry professionals",purpose:"To announce",
-   context:"HCT has signed a 3-year MOU with Microsoft UAE to provide students with free Azure cloud certifications and internship opportunities at Microsoft offices.",
-   tip:"Ethos = credibility. Lead with both organisations' names and their authority. Mention the specific benefit (free certifications, internships) and the formal agreement (MOU, 3-year).",
-   model:"Big news from HCT and Microsoft UAE! We have signed a 3-year MOU to give HCT students free Azure cloud certifications and real internship opportunities at Microsoft offices across the UAE. Backed by two world-class institutions, your future just got bigger. Applications open next semester — stay tuned.",
-   breakdown:[
-     {label:"🪝 Hook",note:'"Big news from HCT and Microsoft UAE!" — names both partners immediately, signals importance.'},
-     {label:"🏅 Ethos",note:"Two authoritative organisations named upfront, formal agreement (MOU, 3-year) establishes credibility."},
-     {label:"📋 Type",note:"Partnership & Collaboration — both organisation names and the joint benefit are clear."},
-     {label:"🎯 Purpose",note:"Announces the partnership and clearly states the benefit to the audience."},
-   ]},
-  {id:6,emoji:"💼",title:"Faculty Job Opening",color:"purple",
-   type:"Hiring Notice (HN)",appeal:"Logos (clear, factual details)",writer:"HCT Human Resources",audience:"Qualified English language professionals",purpose:"To inform & call for action",
-   context:"HCT is hiring 5 new English language instructors across UAE campuses. Deadline: March 31st. Minimum requirement: Master's degree + 3 years' teaching experience.",
-   tip:"Logos = precise facts. Include the number of positions (5), qualifications required, deadline (March 31st), and a clear call to action. Hook with energy — make it exciting to apply!",
-   model:"Jobs, jobs, jobs! HCT is hiring 5 English language instructors across our UAE campuses. Requirements: Master's degree in English or Education + minimum 3 years' teaching experience. Application deadline: March 31st. Join one of the UAE's leading higher education institutions — apply now at hct.ac.ae/careers.",
-   breakdown:[
-     {label:"🪝 Hook",note:'"Jobs, jobs, jobs!" — energetic repetition, instantly signals a hiring notice.'},
-     {label:"📊 Logos",note:"All key facts: 5 positions, specific qualifications, exact deadline (March 31st), direct application link."},
-     {label:"📋 Type",note:"Hiring Notice — follows the expected structure: role, requirements, deadline, how to apply."},
-     {label:"🎯 Purpose",note:"Informs and calls qualified readers to take immediate action."},
-   ]},
-];
-
-const catColor = {
-  "Announcement Type":"indigo","Hooks":"cyan","Purpose":"purple",
-  "Rhetorical Appeal":"teal","Post Elements":"orange","Post Quality":"pink"
+const guideMap={
+  Logos:[
+    {step:"1️⃣ Hook",hint:"Open with a clear, direct label that signals urgency or importance — e.g. \"Security Alert:\" or \"IT Services Notice:\"."},
+    {step:"2️⃣ Use numbers",hint:"Include at least 2–3 specific figures from the context — exact times, durations, quantities, or percentages."},
+    {step:"3️⃣ State the facts",hint:"Give the key information clearly and concisely. Avoid emotional language. Stick to what, when, how many, and what to do."},
+    {step:"4️⃣ Call to action",hint:"End with a precise instruction — a link, email address, or clear next step. Make it easy to follow."},
+    {step:"5️⃣ Tone check",hint:"Keep the language formal and professional. No exclamation marks or emotional words — let the facts do the work."},
+  ],
+  Ethos:[
+    {step:"1️⃣ Hook",hint:"Open by naming the organisation or credentials. Credibility must appear in your very first sentence."},
+    {step:"2️⃣ Establish authority",hint:"Mention qualifications, partnerships, endorsements, or official roles — this is your Ethos appeal."},
+    {step:"3️⃣ Make your point",hint:"Once credibility is established, present your message or request. The audience is now more likely to respond."},
+    {step:"4️⃣ Call to action",hint:"Invite the audience to act, join, or engage — now that they trust you, this feels natural and compelling."},
+    {step:"5️⃣ Tone check",hint:"Sound knowledgeable and professional. Avoid casual language. The writer's voice should feel authoritative but approachable."},
+  ],
+  Pathos:[
+    {step:"1️⃣ Hook",hint:"Open with energy, emotion, or an exclamation. Make the reader FEEL something immediately — pride, joy, urgency, or excitement."},
+    {step:"2️⃣ Inclusive language",hint:"Use 'we', 'our', 'you', 'together' — pull the audience into the story. Pathos is about shared feeling."},
+    {step:"3️⃣ Paint a picture",hint:"Use vivid, emotional language. Describe what this moment means, not just what happened."},
+    {step:"4️⃣ Connect to values",hint:"Link to something the audience cares about — community, pride, environment, family, or achievement."},
+    {step:"5️⃣ End with impact",hint:"Close with a memorable, emotional line. Short sentences work powerfully: \"We are HCT. We are champions.\""},
+  ],
 };
 
-/* ═══════════════════════════════════════════════════════════════════
+const scenarios=[
+  {id:1,emoji:"📡",title:"IT Services Alert",color:"blue",type:"Company News (CN)",appeal:"Logos (logic + facts)",writer:"IT Services Department",audience:"All campus users",purpose:"To inform & reduce disruption",context:"Sunday, 10:00–12:00 – planned campus network maintenance. Over 2,000 campus users will be affected.",model:"IT Services notice: Campus Wi-Fi will be offline Sunday 10:00–12:00 for scheduled maintenance. Over 2,000 users will be affected during this 2-hour window. To stay connected, use mobile data or visit the Library PCs. Service will return by 12:00. Thank you for your patience.",breakdown:[{label:"🪝 Hook",note:'"IT Services notice:" — clear, direct, professional opener.'},{label:"📊 Logos",note:"Exact times (10:00–12:00), duration (2 hours), number of users (2,000) — all facts, no emotion."},{label:"🎯 Purpose",note:"Informs and reduces disruption with a practical alternative."},{label:"✍️ Writer",note:"IT Services — formal, institutional voice used throughout."}]},
+  {id:2,emoji:"🌱",title:"Environmental Campaign",color:"teal",type:"Upcoming Event (UE)",appeal:"Ethos (credibility + trust)",writer:"HCT Environmental Club",audience:"Students and staff on campus",purpose:"To persuade & call for action",context:"World Environment Day – the club has organised a campus clean-up with 3 faculty supervisors and partnership with the UAE Ministry of Climate Change.",model:"HCT Environmental Club, backed by 3 faculty supervisors and the UAE Ministry of Climate Change, invites you to our World Environment Day campus clean-up. Endorsed by experts and guided by professionals, this is your chance to make a real impact. Join us — our campus, our responsibility.",breakdown:[{label:"🪝 Hook",note:'"HCT Environmental Club, backed by 3 faculty supervisors…" — establishes credibility immediately.'},{label:"🏅 Ethos",note:"Faculty endorsement, Ministry partnership — authority is established before the call to action."},{label:"🎯 Purpose",note:"Persuades and calls students to join the event."},{label:"👥 Audience",note:"Students and staff addressed directly with \"our campus, our responsibility.\""}]},
+  {id:3,emoji:"🏆",title:"HCT Competition Win",color:"orange",type:"Milestones & Achievements (MA)",appeal:"Pathos (emotion + pride)",writer:"HCT Student Council",audience:"All HCT students and staff",purpose:"To announce & celebrate",context:"HCT Abu Dhabi Men's College won 1st place at the UAE National Robotics Championship, beating 24 other colleges.",model:"We did it! 🏆 HCT Abu Dhabi Men's College has won 1st place at the UAE National Robotics Championship, defeating 24 colleges across the country. This is YOUR victory — every student, every lecturer, every supporter made this possible. We are HCT. We are champions. Congratulations to our incredible team!",breakdown:[{label:"🪝 Hook",note:'"We did it! 🏆" — short, emotional, immediately celebratory.'},{label:"❤️ Pathos",note:"Pride, celebration, inclusive 'we/our/your' language — emotionally connects the whole community."},{label:"📋 Type",note:"Milestones & Achievements — celebrates a landmark victory with specific facts (1st place, 24 colleges)."},{label:"👥 Audience",note:"All HCT addressed directly: \"every student, every lecturer, every supporter.\""}]},
+  {id:4,emoji:"⚠️",title:"Campus Safety Warning",color:"pink",type:"Company News (CN)",appeal:"Logos (clear facts + statistics)",writer:"HCT Security Office",audience:"All campus community members",purpose:"To warn",context:"In the past 2 weeks, 15 students reported receiving phishing emails asking for login credentials. 3 accounts were compromised.",model:"Security Alert: In the past 2 weeks, 15 students have reported phishing emails requesting HCT login credentials, resulting in 3 compromised accounts. Do NOT click suspicious links or share your password. Report any suspicious emails immediately to security@hct.ac.ae. Your account security is our priority.",breakdown:[{label:"🪝 Hook",note:'"Security Alert:" — direct and urgent without being emotional.'},{label:"📊 Logos",note:"Three precise statistics: 2 weeks, 15 students, 3 compromised accounts — no exaggeration, just facts."},{label:"🎯 Purpose",note:"Warns clearly and provides a specific action step."},{label:"✍️ Writer",note:"HCT Security Office — formal, professional, authoritative tone throughout."}]},
+  {id:5,emoji:"🤝",title:"New Campus Partnership",color:"indigo",type:"Partnerships & Collaborations (PC)",appeal:"Ethos (credibility + authority)",writer:"HCT Communications Office",audience:"Students, staff, and industry professionals",purpose:"To announce",context:"HCT has signed a 3-year MOU with Microsoft UAE to provide students with free Azure cloud certifications and internship opportunities at Microsoft offices.",model:"Big news from HCT and Microsoft UAE! We have signed a 3-year MOU to give HCT students free Azure cloud certifications and real internship opportunities at Microsoft offices across the UAE. Backed by two world-class institutions, your future just got bigger. Applications open next semester — stay tuned.",breakdown:[{label:"🪝 Hook",note:'"Big news from HCT and Microsoft UAE!" — names both partners immediately.'},{label:"🏅 Ethos",note:"Two authoritative organisations named upfront, formal agreement (MOU, 3-year) establishes credibility."},{label:"📋 Type",note:"Partnership & Collaboration — both organisation names and the joint benefit are clear."},{label:"🎯 Purpose",note:"Announces the partnership and clearly states the benefit to the audience."}]},
+  {id:6,emoji:"💼",title:"Faculty Job Opening",color:"purple",type:"Hiring Notice (HN)",appeal:"Logos (clear, factual details)",writer:"HCT Human Resources",audience:"Qualified English language professionals",purpose:"To inform & call for action",context:"HCT is hiring 5 new English language instructors across UAE campuses. Deadline: March 31st. Minimum requirement: Master's degree + 3 years' teaching experience.",model:"Jobs, jobs, jobs! HCT is hiring 5 English language instructors across our UAE campuses. Requirements: Master's degree in English or Education + minimum 3 years' teaching experience. Application deadline: March 31st. Join one of the UAE's leading higher education institutions — apply now at hct.ac.ae/careers.",breakdown:[{label:"🪝 Hook",note:'"Jobs, jobs, jobs!" — energetic repetition, instantly signals a hiring notice.'},{label:"📊 Logos",note:"All key facts: 5 positions, specific qualifications, exact deadline, direct application link."},{label:"📋 Type",note:"Hiring Notice — follows the expected structure: role, requirements, deadline, how to apply."},{label:"🎯 Purpose",note:"Informs and calls qualified readers to take immediate action."}]},
+];
+
+const glossaryTerms=[
+  {cat:"Purposes",en:"To Inform",ar:"الإعلام / الإخبار",def:"Share facts or knowledge clearly",ardef:"مشاركة الحقائق والمعلومات بوضوح",color:"purple"},
+  {cat:"Purposes",en:"To Advertise",ar:"الترويج / الإعلان",def:"Promote a product or service",ardef:"الترويج لمنتج أو خدمة",color:"purple"},
+  {cat:"Purposes",en:"To Announce",ar:"الإعلان عن خبر",def:"Share important updates or news",ardef:"مشاركة التحديثات أو الأخبار المهمة",color:"purple"},
+  {cat:"Purposes",en:"To Warn",ar:"التحذير",def:"Alert the audience about risks",ardef:"تنبيه الجمهور من المخاطر",color:"purple"},
+  {cat:"Purposes",en:"To Call for Action",ar:"الحث على العمل",def:"Encourage immediate action",ardef:"تشجيع اتخاذ إجراء فوري",color:"purple"},
+  {cat:"Purposes",en:"To Persuade",ar:"الإقناع",def:"Change minds or influence decisions",ardef:"تغيير الآراء والتأثير في القرارات",color:"purple"},
+  {cat:"Announcement Types",en:"Product Launch",ar:"إطلاق منتج",def:"New product available for the first time",ardef:"منتج جديد متاح لأول مرة",color:"indigo"},
+  {cat:"Announcement Types",en:"Company News",ar:"أخبار الشركة",def:"Internal updates and business news",ardef:"تحديثات داخلية وأخبار الأعمال",color:"indigo"},
+  {cat:"Announcement Types",en:"Upcoming Event",ar:"حدث قادم",def:"An event happening in the future",ardef:"حدث سيحدث في المستقبل",color:"indigo"},
+  {cat:"Announcement Types",en:"Sales & Promotions",ar:"عروض ومبيعات",def:"Discounts, offers, and deals",ardef:"خصومات وعروض وصفقات",color:"indigo"},
+  {cat:"Announcement Types",en:"Milestones & Achievements",ar:"إنجازات ومعالم",def:"Celebrating accomplishments",ardef:"الاحتفال بالإنجازات والمناسبات",color:"indigo"},
+  {cat:"Announcement Types",en:"Partnerships & Collaborations",ar:"شراكات وتعاون",def:"New joint ventures between organisations",ardef:"مشاريع مشتركة بين مؤسستين أو أكثر",color:"indigo"},
+  {cat:"Announcement Types",en:"Hiring Notices",ar:"إعلانات توظيف",def:"Job openings and applications",ardef:"وظائف شاغرة وطلبات التوظيف",color:"indigo"},
+  {cat:"Rhetorical Appeals",en:"Logos",ar:"المنطق والحقائق",def:"Logic, data, and statistics",ardef:"المنطق والبيانات والإحصاءات",color:"teal"},
+  {cat:"Rhetorical Appeals",en:"Ethos",ar:"المصداقية والسلطة",def:"Credibility and trust",ardef:"المصداقية والثقة والسلطة",color:"teal"},
+  {cat:"Rhetorical Appeals",en:"Pathos",ar:"المشاعر والعاطفة",def:"Emotion and feelings",ardef:"الأحاسيس والمشاعر",color:"teal"},
+  {cat:"Rhetorical Appeals",en:"Rhetorical Appeal",ar:"الأسلوب البلاغي",def:"A persuasive technique used in writing",ardef:"أسلوب إقناعي يُستخدم في الكتابة",color:"teal"},
+  {cat:"Post Elements",en:"Hook",ar:"جملة الاستهلال",def:"Attention-grabbing opening line",ardef:"جملة افتتاحية تجذب الانتباه",color:"cyan"},
+  {cat:"Post Elements",en:"Writer",ar:"الكاتب / المُرسِل",def:"Person or organisation creating the post",ardef:"الشخص أو المؤسسة التي أنشأت المنشور",color:"orange"},
+  {cat:"Post Elements",en:"Audience",ar:"الجمهور / المتلقي",def:"Target group the post is for",ardef:"المجموعة المستهدفة بالمنشور",color:"orange"},
+  {cat:"Post Elements",en:"Message",ar:"الرسالة",def:"Main information being shared",ardef:"المعلومات الرئيسية في المنشور",color:"orange"},
+  {cat:"Post Elements",en:"Purpose",ar:"الهدف / الغرض",def:"The goal behind the post",ardef:"الغرض أو الهدف من المنشور",color:"orange"},
+  {cat:"Post Elements",en:"Context",ar:"السياق",def:"Background or setting of the post",ardef:"خلفية المنشور وإطاره",color:"orange"},
+  {cat:"Post Quality",en:"Clarity",ar:"الوضوح",def:"Easy to understand",ardef:"سهل الفهم وغير مبهم",color:"pink"},
+  {cat:"Post Quality",en:"Conciseness",ar:"الإيجاز",def:"Brief and to the point",ardef:"مختصر ومباشر دون حشو",color:"pink"},
+  {cat:"Post Quality",en:"Professionalism",ar:"الاحترافية",def:"Formal and respectful tone",ardef:"أسلوب رسمي ومحترم",color:"pink"},
+  {cat:"Post Quality",en:"Engagement",ar:"التفاعل",def:"Grabs and holds attention",ardef:"يجذب الانتباه ويُشرك الجمهور",color:"pink"},
+  {cat:"Post Quality",en:"Structure",ar:"التنظيم / البنية",def:"Well-organized layout",ardef:"ترتيب وتنظيم جيد للمحتوى",color:"pink"},
+  {cat:"General",en:"Social Media Post",ar:"منشور رقمي",def:"Content shared on social platforms",ardef:"محتوى يُنشر على منصات التواصل الاجتماعي",color:"blue"},
+  {cat:"General",en:"Call to Action",ar:"دعوة للعمل",def:"Instruction encouraging the audience to act",ardef:"تعليمات تشجع الجمهور على التصرف الفوري",color:"blue"},
+  {cat:"General",en:"Caption",ar:"نص المنشور",def:"Written text content of a post",ardef:"النص المكتوب المرفق بالمنشور",color:"blue"},
+  {cat:"General",en:"Hashtag",ar:"وسم (هاشتاق)",def:"Keyword used to categorise posts",ardef:"كلمة مفتاحية لتصنيف المنشورات",color:"blue"},
+  {cat:"General",en:"Announcement",ar:"إعلان",def:"Public statement sharing important news",ardef:"بيان عام يشارك أخباراً أو معلومات مهمة",color:"blue"},
+];
+
+const catColor={"Announcement Type":"indigo","Hooks":"cyan","Purpose":"purple","Rhetorical Appeal":"teal","Post Elements":"orange","Post Quality":"pink"};
+const lightMap={purple:"#f5f3ff",indigo:"#eef2ff",cyan:"#ecfeff",teal:"#f0fdfa",orange:"#fff7ed",pink:"#fdf2f8",blue:"#eff6ff"};
+const solidMap={purple:"#7c3aed",indigo:"#4338ca",cyan:"#0891b2",teal:"#0d9488",orange:"#ea580c",pink:"#db2777",blue:"#2563eb"};
+
+/* ═══════════════════════════════════════════════════
    TABS
-═══════════════════════════════════════════════════════════════════ */
-function switchTab(id, btn) {
-  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
+═══════════════════════════════════════════════════ */
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
 }
 
-/* ═══════════════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════
    LEARN
-═══════════════════════════════════════════════════════════════════ */
-function buildLearn() {
-  const container = document.getElementById('tab-learn');
-  let html = '';
-
-  concepts.forEach((grp, gi) => {
-    const c = grp.color;
-    html += `<div class="acc-group ${c}-br" style="margin-bottom:1.25rem;">
-      <div class="acc-header ${c}-bg">${grp.group}</div>`;
-    grp.items.forEach((item, ii) => {
-      const id = `acc-${gi}-${ii}`;
-      html += `
-      <div class="acc-item ${c}-lt ${c}-br">
+═══════════════════════════════════════════════════ */
+function buildLearn(){
+  const el=document.getElementById('tab-learn');
+  let h='';
+  concepts.forEach((grp,gi)=>{
+    const c=grp.color;
+    h+=`<div class="acc-group" style="border-color:${solidMap[c]}55;">
+      <div class="acc-head ${c}-bg">${grp.group}</div>`;
+    grp.items.forEach((item,ii)=>{
+      const id=`ac${gi}-${ii}`;
+      h+=`<div style="border-top:${ii>0?'1px solid '+solidMap[c]+'22':'none'};background:${lightMap[c]}">
         <button class="acc-trigger" onclick="toggleAcc('${id}','${c}')">
-          <span style="display:flex;align-items:center;gap:.5rem;" class="${c}-tx">
-            <span>${item.icon}</span><span style="font-weight:600;">${item.term}</span>
-            ${item.abbr ? `<span class="badge ${c}-bx">${item.abbr}</span>` : ''}
+          <span style="display:flex;align-items:center;gap:.5rem;color:${solidMap[c]};font-weight:600;">
+            ${item.icon} ${item.term}
+            ${item.abbr?`<span class="badge ${c}-bx">${item.abbr}</span>`:''}
           </span>
-          <span id="${id}-chev" class="acc-chevron">›</span>
+          <span id="${id}c" class="acc-chev">›</span>
         </button>
         <div id="${id}" class="acc-body">
           <p class="acc-def">${item.def}</p>
-          <div class="acc-ex ${c}-bx ${c}-br">📌 ${item.ex}</div>
+          <div class="acc-ex ${c}-bx" style="border:1px solid ${solidMap[c]}33">📌 ${item.ex}</div>
         </div>
       </div>`;
     });
-    html += `</div>`;
+    h+=`</div>`;
   });
-
-  // Quick ref table
-  html += `
-  <div class="acc-group indigo-br">
-    <div class="acc-header indigo-bg">📊 Quick Reference — 7 Announcement Types</div>
+  h+=`<div class="acc-group" style="border-color:#c7d2fe;">
+    <div class="acc-head indigo-bg">📊 Quick Reference — 7 Announcement Types</div>
     <table class="ref-table">
       <thead style="background:#eef2ff;">
-        <tr>
-          <th class="indigo-tx">Abbr.</th>
-          <th class="indigo-tx">Type</th>
-          <th class="indigo-tx">Key Purpose</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${[["PL","Product Launch","New product or service available"],
-           ["CN","Company News","Policy, internal updates, changes"],
-           ["UE","Upcoming Event","Future event details"],
-           ["SP","Sales & Promotions","Discounts, deals, offers"],
-           ["MA","Milestones & Achievements","Celebrating success"],
-           ["PC","Partnerships & Collaborations","New joint ventures"],
-           ["HN","Hiring Notices","Job openings & applications"]
-          ].map(([a,t,d],i)=>`
-        <tr style="background:${i%2===0?'white':'#f5f7ff'}">
-          <td style="font-weight:700;color:#4338ca;">${a}</td>
-          <td style="color:#1f2937;">${t}</td>
-          <td style="color:#6b7280;">${d}</td>
-        </tr>`).join('')}
+        <tr><th style="color:#4338ca;">Abbr.</th><th style="color:#4338ca;">Type</th><th style="color:#4338ca;">Key Purpose</th></tr>
+      </thead><tbody>
+      ${[["PL","Product Launch","New product or service available"],["CN","Company News","Policy, internal updates, changes"],["UE","Upcoming Event","Future event details"],["SP","Sales & Promotions","Discounts, deals, offers"],["MA","Milestones & Achievements","Celebrating success"],["PC","Partnerships & Collaborations","New joint ventures"],["HN","Hiring Notices","Job openings & applications"]].map(([a,t,d],i)=>`
+      <tr style="border-top:1px solid #e0e7ff;background:${i%2?'#f5f7ff':'white'}">
+        <td style="font-weight:800;color:#4338ca;">${a}</td><td style="color:#1f2937;">${t}</td><td style="color:#6b7280;font-size:.82rem;">${d}</td>
+      </tr>`).join('')}
       </tbody>
     </table>
   </div>`;
-
-  container.innerHTML = html;
+  el.innerHTML=h;
+}
+function toggleAcc(id,c){
+  const b=document.getElementById(id),ch=document.getElementById(id+'c');
+  const o=b.classList.toggle('open');
+  ch.style.transform=o?'rotate(90deg)':'rotate(0deg)';
+  ch.style.color=o?solidMap[c]:'#9ca3af';
 }
 
-function toggleAcc(id, color) {
-  const body = document.getElementById(id);
-  const chev = document.getElementById(id + '-chev');
-  const isOpen = body.classList.contains('open');
-  body.classList.toggle('open', !isOpen);
-  chev.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(90deg)';
-}
-
-/* ═══════════════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════
    PRACTICE
-═══════════════════════════════════════════════════════════════════ */
-let pool = [], qIdx = 0, selected = null, history = [];
-
-function buildPractice() {
-  pool = [...questions].sort(() => Math.random() - 0.5).slice(0, 18);
-  qIdx = 0; selected = null; history = [];
-  renderQuestion();
+═══════════════════════════════════════════════════ */
+let pool=[],qIdx=0,picked=null,hist=[];
+function buildPractice(){
+  pool=[...questions].sort(()=>Math.random()-.5).slice(0,18);
+  qIdx=0;picked=null;hist=[];renderQ();
 }
-
-function renderQuestion() {
-  const area = document.getElementById('quiz-area');
-  if (qIdx >= pool.length) { renderResult(); return; }
-  const q = pool[qIdx];
-  const c = catColor[q.cat] || 'purple';
-  const pct = (qIdx / pool.length) * 100;
-  const letters = ['A','B','C','D'];
-
-  area.innerHTML = `
+function renderQ(){
+  const area=document.getElementById('quiz-area');
+  if(qIdx>=pool.length){renderResult();return;}
+  const q=pool[qIdx],c=catColor[q.cat]||'purple',pct=(qIdx/pool.length)*100;
+  area.innerHTML=`
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
       <span class="cat-badge ${c}-bx">${q.cat}</span>
-      <span style="font-size:.875rem;color:#6b7280;">${qIdx+1} / ${pool.length}</span>
+      <span style="font-size:.8rem;color:#6b7280;font-weight:600;">${qIdx+1} / ${pool.length}</span>
     </div>
-    <div class="progress-bar-bg">
-      <div class="progress-bar ${c}-bg" style="width:${pct}%"></div>
-    </div>
-    <div class="q-box ${c}-lt ${c}-br" style="border:2px solid;">
+    <div class="progress-bar-bg"><div class="progress-bar ${c}-bg" style="width:${pct}%"></div></div>
+    <div class="q-box ${c}-lt" style="border-color:${solidMap[c]}55;">
       <p style="font-weight:500;color:#1f2937;line-height:1.6;">${q.q}</p>
     </div>
-    <div id="options">
-      ${q.opts.map((opt,i) => `
-        <button class="opt-btn" id="opt-${i}" onclick="chooseAnswer(${i})">
-          <span class="opt-letter" id="ltr-${i}">${letters[i]}</span>
-          ${opt}
+    <div id="opts">
+      ${q.opts.map((o,i)=>`
+        <button class="opt-btn" id="o${i}" onclick="pick(${i})">
+          <span class="opt-letter" id="l${i}">${String.fromCharCode(65+i)}</span>${o}
         </button>`).join('')}
     </div>
-    <div id="feedback" style="display:none;" class="fb-box"></div>
-    <button id="next-btn" class="next-btn ${c}-bg" onclick="nextQuestion()" style="display:none;">
-      ${qIdx+1 >= pool.length ? 'See Results →' : 'Next Question →'}
+    <div id="fb" style="display:none;" class="fb-box"></div>
+    <button id="nxt" class="next-btn ${c}-bg" onclick="nextQ()" style="display:none;">
+      ${qIdx+1>=pool.length?'See Results →':'Next Question →'}
     </button>`;
 }
-
-function chooseAnswer(i) {
-  if (selected !== null) return;
-  selected = i;
-  const q = pool[qIdx];
-  const letters = ['A','B','C','D'];
-  q.opts.forEach((_, idx) => {
-    const btn = document.getElementById('opt-'+idx);
-    const ltr = document.getElementById('ltr-'+idx);
-    if (idx === q.ans) { btn.className='opt-btn correct'; ltr.textContent='✓'; }
-    else if (idx === i && i !== q.ans) { btn.className='opt-btn wrong'; ltr.textContent='✗'; }
-    else { btn.className='opt-btn faded'; ltr.textContent=letters[idx]; }
+function pick(i){
+  if(picked!==null)return; picked=i;
+  const q=pool[qIdx];
+  q.opts.forEach((_,idx)=>{
+    const b=document.getElementById('o'+idx),l=document.getElementById('l'+idx);
+    b.disabled=true;
+    if(idx===q.ans){b.className='opt-btn correct';l.textContent='✓';}
+    else if(idx===i){b.className='opt-btn wrong';l.textContent='✗';}
+    else{b.className='opt-btn faded';l.textContent=String.fromCharCode(65+idx);}
   });
-  const fb = document.getElementById('feedback');
-  fb.style.display = 'block';
-  if (i === q.ans) { fb.className='fb-box fb-ok'; fb.textContent='✅ Correct! Well done.'; }
-  else { fb.className='fb-box fb-bad'; fb.textContent=`❌ Not quite. The correct answer is: "${q.opts[q.ans]}"`; }
-  document.getElementById('next-btn').style.display = 'block';
+  const fb=document.getElementById('fb');fb.style.display='block';
+  if(i===q.ans){fb.className='fb-box fb-ok';fb.textContent='✅ Correct! Well done.';}
+  else{fb.className='fb-box fb-bad';fb.textContent='❌ Not quite. The correct answer is: "'+q.opts[q.ans]+'"';}
+  document.getElementById('nxt').style.display='block';
 }
+function nextQ(){hist.push({ok:picked===pool[qIdx].ans});qIdx++;picked=null;renderQ();}
 
-function nextQuestion() {
-  history.push({ ok: selected === pool[qIdx].ans });
-  qIdx++; selected = null;
-  renderQuestion();
-}
-
-function renderResult() {
-  const total = history.filter(h => h.ok).length;
-  const pct = Math.round((total / pool.length) * 100);
-  const pass = pct >= 80;
-  document.getElementById('quiz-area').innerHTML = `
-    <div class="result-screen">
-      <div class="result-pct" style="color:${pass?'#14b8a6':'#f97316'}">${pct}%</div>
-      <div class="result-title">${pass ? '🎉 Excellent work!' : '💪 Keep practising!'}</div>
-      <div class="result-sub">You got ${total} out of ${pool.length} correct.</div>
-      <div class="hist-dots">
-        ${history.map((h,i)=>`<div class="hist-dot" style="background:${h.ok?'#4ade80':'#f87171'}">${i+1}</div>`).join('')}
+function renderResult(){
+  const tot=hist.filter(h=>h.ok).length,pct=Math.round(tot/pool.length*100),pass=pct>=80;
+  document.getElementById('quiz-area').innerHTML=`
+    <div class="result-wrap">
+      <div style="font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:#9ca3af;margin-bottom:.4rem;">Your Score</div>
+      <div class="result-pct">${pct}%</div>
+      <div class="result-label">${pass?'🎉 Excellent Work!':'💪 Keep Practising!'}</div>
+      <div style="color:#6b7280;font-size:.875rem;margin-bottom:1.25rem;">You got <strong>${tot}</strong> out of <strong>${pool.length}</strong> correct.</div>
+      <div style="margin-bottom:1.5rem;line-height:1;">
+        ${hist.map((h,i)=>`<span class="hist-dot" style="background:${h.ok?'#4ade80':'#f87171'}">${i+1}</span>`).join('')}
       </div>
-      <button class="restart-btn" onclick="buildPractice()" style="margin-top:1rem;">🔄 Try Again</button>
+      ${pass?`
+      <button class="cert-btn" onclick="generateCertificate(${pct},${tot},${pool.length})">
+        🎓 Download My Certificate
+      </button>`:''}
+      <button class="${pass?'retry-btn':'next-btn'}" style="${pass?'':'background:#7c3aed;'}" onclick="buildPractice()">
+        🔄 Try Again
+      </button>
     </div>`;
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   CREATE
-═══════════════════════════════════════════════════════════════════ */
-let activeSc = null;
+/* ═══════════════════════════════════════════════════
+   CERTIFICATE
+═══════════════════════════════════════════════════ */
+function generateCertificate(pct,tot,poolLen){
+  const name=(document.getElementById('sname')?.value.trim())||'Student';
+  const sid=(document.getElementById('sid')?.value.trim())||'—';
+  const date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+<title>Certificate – LSC 1103</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0ff;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:2rem;}
+.cert{background:white;width:700px;border-radius:1.5rem;overflow:hidden;box-shadow:0 20px 60px rgba(124,58,237,.25);border:1px solid #ddd6fe;}
+.cert-banner{background:linear-gradient(135deg,#6d28d9,#9333ea,#db2777);padding:2.5rem 2rem;text-align:center;color:white;position:relative;overflow:hidden;}
+.cert-banner::before{content:'🎓';position:absolute;font-size:8rem;opacity:.06;top:-1rem;right:2rem;}
+.cert-banner::after{content:'⭐';position:absolute;font-size:6rem;opacity:.06;bottom:-1rem;left:2rem;}
+.cert-sub{font-size:.72rem;text-transform:uppercase;letter-spacing:.18em;opacity:.8;margin-bottom:.35rem;}
+.cert-title{font-size:2rem;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,.2);}
+.cert-body{padding:2.5rem;text-align:center;}
+.cert-presented{font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;color:#9ca3af;margin-bottom:.5rem;}
+.cert-name{font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,#6d28d9,#db2777);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.25rem;}
+.cert-id{font-size:.85rem;color:#9ca3af;margin-bottom:1.5rem;}
+.cert-desc{color:#4b5563;font-size:.9rem;line-height:1.8;margin-bottom:1.5rem;}
+.cert-badge{display:inline-flex;flex-direction:column;align-items:center;background:linear-gradient(135deg,#7c3aed,#db2777);color:white;border-radius:1rem;padding:1rem 2rem;margin-bottom:1.5rem;box-shadow:0 6px 20px rgba(124,58,237,.3);}
+.cert-score-num{font-size:2.8rem;font-weight:900;line-height:1;}
+.cert-score-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;opacity:.85;}
+.cert-meta{display:flex;justify-content:center;gap:2rem;margin-bottom:0;}
+.cert-meta-item{text-align:center;}
+.cert-meta-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:#9ca3af;margin-bottom:.15rem;}
+.cert-meta-val{font-size:.85rem;font-weight:700;color:#374151;}
+.cert-footer{background:linear-gradient(to right,#f5f3ff,#fdf2f8);border-top:2px solid #ede9fe;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;}
+.cert-footer-l{font-size:.72rem;color:#7c3aed;font-weight:700;}
+.cert-seal{width:3.5rem;height:3.5rem;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#db2777);display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:0 2px 8px rgba(124,58,237,.3);}
+.cert-footer-r{font-size:.72rem;color:#7c3aed;font-weight:700;text-align:right;}
+@media print{body{background:white;padding:0;}@page{size:A4 landscape;margin:.5cm;}.cert{box-shadow:none;border:2px solid #ddd6fe;width:100%;}}
+</style></head><body>
+<div class="cert">
+  <div class="cert-banner">
+    <div class="cert-sub">Higher Colleges of Technology · UAE</div>
+    <div class="cert-title">Certificate of Achievement</div>
+  </div>
+  <div class="cert-body">
+    <div class="cert-presented">This certificate is proudly awarded to</div>
+    <div class="cert-name">${name}</div>
+    <div class="cert-id">Student ID: ${sid}</div>
+    <div class="cert-desc">
+      for successfully completing the<br>
+      <strong>Social Media Communication Practice Quiz</strong><br>
+      as part of <strong>LSC 1103 – Social Media Communication</strong>
+    </div>
+    <div class="cert-badge">
+      <div class="cert-score-num">${pct}%</div>
+      <div class="cert-score-label">Final Score</div>
+    </div>
+    <div class="cert-meta">
+      <div class="cert-meta-item">
+        <div class="cert-meta-label">Correct Answers</div>
+        <div class="cert-meta-val">${tot} / ${poolLen}</div>
+      </div>
+      <div class="cert-meta-item">
+        <div class="cert-meta-label">Date Completed</div>
+        <div class="cert-meta-val">${date}</div>
+      </div>
+      <div class="cert-meta-item">
+        <div class="cert-meta-label">Pass Mark</div>
+        <div class="cert-meta-val">80%</div>
+      </div>
+    </div>
+  </div>
+  <div class="cert-footer">
+    <div class="cert-footer-l">🏛 Higher Colleges of Technology</div>
+    <div class="cert-seal">🎓</div>
+    <div class="cert-footer-r">LSC 1103 · Social Media<br>Communication Lab</div>
+  </div>
+</div>
+<script>setTimeout(()=>window.print(),600);<\/script>
+</body></html>`);
+  w.document.close();
+}
 
-function buildCreate() {
-  const grid = document.getElementById('scenario-grid');
-  grid.innerHTML = scenarios.map(s => {
-    const abbr = (s.type.match(/\(([^)]+)\)/) || [])[1] || '';
-    return `
-    <button class="sc-btn" id="sc-btn-${s.id}" onclick="selectScenario(${s.id})">
-      <div class="sc-emoji">${s.emoji}</div>
-      <div class="sc-name ${s.color}-tx">${s.title}</div>
+/* ═══════════════════════════════════════════════════
+   CREATE
+═══════════════════════════════════════════════════ */
+let activeSc=null,modelVis=false,bdVis=false;
+function buildCreate(){
+  document.getElementById('sc-grid').innerHTML=scenarios.map(s=>{
+    const abbr=(s.type.match(/\(([^)]+)\)/)||[])[1]||'';
+    return `<button class="sc-btn" id="sb${s.id}" onclick="selectSc(${s.id})">
+      <div style="font-size:1.5rem;margin-bottom:.25rem;">${s.emoji}</div>
+      <div style="font-weight:700;color:${solidMap[s.color]};font-size:.85rem;">${s.title}</div>
       <span class="badge ${s.color}-bx" style="margin-top:.25rem;">${abbr}</span>
     </button>`;
   }).join('');
 }
-
-function selectScenario(id) {
-  activeSc = scenarios.find(s => s.id === id);
-  const c = activeSc.color;
-  document.querySelectorAll('.sc-btn').forEach(b => {
-    b.classList.remove('selected');
-    b.style.borderColor = '#e5e7eb';
-    b.style.background = 'white';
-  });
-  const btn = document.getElementById('sc-btn-' + id);
-  btn.classList.add('selected');
-  // get the light bg colour from CSS variables via computed style workaround
-  const lightMap = {purple:'#f5f3ff',indigo:'#eef2ff',cyan:'#ecfeff',teal:'#f0fdfa',orange:'#fff7ed',pink:'#fdf2f8',blue:'#eff6ff'};
-  const borderMap = {purple:'#7c3aed',indigo:'#4338ca',cyan:'#0891b2',teal:'#0d9488',orange:'#ea580c',pink:'#db2777',blue:'#2563eb'};
-  btn.style.background = lightMap[c];
-  btn.style.borderColor = borderMap[c];
-
-  const abbr = (activeSc.type.match(/\(([^)]+)\)/) || [])[1] || '';
-  const briefRows = [
-    ["📋 Type", activeSc.type], ["🎭 Appeal", activeSc.appeal],
-    ["✍️ Writer", activeSc.writer], ["👥 Audience", activeSc.audience],
-    ["🎯 Purpose", activeSc.purpose], ["🌍 Context", activeSc.context]
-  ];
-
-  const detail = document.getElementById('scenario-detail');
-  detail.className = '';
-  detail.innerHTML = `
-    <div class="brief-box ${c}-lt ${c}-br" style="border:2px solid;margin-bottom:1rem;">
-      <div style="font-weight:700;font-size:.875rem;margin-bottom:.5rem;" class="${c}-tx">📋 Your Scenario Brief</div>
+function selectSc(id){
+  activeSc=scenarios.find(s=>s.id===id);
+  modelVis=false;bdVis=false;
+  const c=activeSc.color;
+  document.querySelectorAll('.sc-btn').forEach(b=>{b.style.borderColor='#e5e7eb';b.style.background='white';});
+  const sb=document.getElementById('sb'+id);
+  sb.style.borderColor=solidMap[c];sb.style.background=lightMap[c];
+  const appealKey=Object.keys(guideMap).find(k=>activeSc.appeal.includes(k))||'Logos';
+  const steps=guideMap[appealKey];
+  const briefRows=[["📋 Type",activeSc.type],["🎭 Appeal",activeSc.appeal],["✍️ Writer",activeSc.writer],["👥 Audience",activeSc.audience],["🎯 Purpose",activeSc.purpose],["🌍 Context",activeSc.context]];
+  document.getElementById('sc-detail').innerHTML=`
+    <div style="background:${lightMap[c]};border:2px solid ${solidMap[c]}44;border-radius:1rem;padding:1rem;margin-bottom:1rem;">
+      <div style="font-weight:700;font-size:.875rem;color:${solidMap[c]};margin-bottom:.5rem;">📋 Your Scenario Brief</div>
       ${briefRows.map(([l,v])=>`<div class="brief-row"><span class="brief-label">${l}:</span><span class="brief-val">${v}</span></div>`).join('')}
-      <div class="tip-text">💡 ${activeSc.tip}</div>
     </div>
-
+    <div style="background:#f8fafc;border:2px solid #e2e8f0;border-radius:1rem;padding:1rem;margin-bottom:1rem;">
+      <div style="font-weight:700;color:#334155;font-size:.875rem;margin-bottom:.75rem;">✏️ How to Write Your Post — ${appealKey} Guide</div>
+      ${steps.map(s=>`
+        <div style="display:flex;gap:.75rem;margin-bottom:.6rem;align-items:flex-start;">
+          <span style="font-weight:700;font-size:.82rem;min-width:2rem;">${s.step}</span>
+          <div style="background:white;border:1px solid #e2e8f0;border-radius:.6rem;padding:.5rem .75rem;font-size:.8rem;color:#374151;line-height:1.5;flex:1;">${s.hint}</div>
+        </div>`).join('')}
+      <div style="margin-top:.6rem;padding:.6rem .75rem;border-radius:.6rem;background:#ede9fe;border:1px solid #ddd6fe;color:#6d28d9;font-size:.78rem;font-weight:600;">
+        🎯 Remember: <strong>${activeSc.appeal}</strong> — ${appealKey==='Logos'?'use specific numbers and statistics from the context.':appealKey==='Ethos'?'establish credibility and authority first.':'use emotional, inclusive language that connects with feelings.'}
+      </div>
+    </div>
     <div style="margin-bottom:1rem;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">
         <label style="font-size:.875rem;font-weight:600;color:#374151;">✍️ Write your post (target: 50–60 words)</label>
-        <span class="wc-badge wc-neutral" id="wc-badge">0 words</span>
+        <span class="wc-badge wc-neutral" id="wcb">0 words</span>
       </div>
-      <textarea class="post-area" id="post-area" rows="5"
-        placeholder="Start with a strong hook! Then include your message, details, and a call to action..."
+      <textarea class="post-area" id="pa" rows="5"
+        placeholder="Start with your hook. Then add your key facts or appeal. End with a clear call to action."
         oninput="updateWC()"></textarea>
     </div>
-
     <div class="check-list">
-      <div style="font-weight:700;color:#334155;font-size:.875rem;margin-bottom:.6rem;">☑️ Self-Check (<span id="check-count">0</span>/${checklist.length})</div>
-      ${checklist.map(c=>`
-        <label class="check-item">
-          <input type="checkbox" id="chk-${c.id}" onchange="updateCheckCount()">
-          <span>${c.label}</span>
-        </label>`).join('')}
-      <div id="check-done" style="display:none;margin-top:.6rem;padding:.6rem .75rem;border-radius:.6rem;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;font-size:.8rem;font-weight:600;">
-        ✅ Great job checking your work! Now compare with the model answer below.
+      <div style="font-weight:700;color:#334155;font-size:.875rem;margin-bottom:.6rem;">☑️ Self-Check (<span id="cc">0</span>/${checklist.length})</div>
+      ${checklist.map(ck=>`<label class="check-item"><input type="checkbox" id="ck-${ck.id}" onchange="updateCC()"> ${ck.label}</label>`).join('')}
+      <div id="ckok" style="display:none;margin-top:.6rem;padding:.6rem .75rem;border-radius:.6rem;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;font-size:.8rem;font-weight:600;">
+        ✅ Great work! Now reveal the sample answer and compare.
       </div>
     </div>
-
+    <button class="print-btn" onclick="doPrint()">🖨️ Print Brief + Guide + My Answer + Sample</button>
     <div class="action-row">
-      <button class="action-btn ${c}-bg" style="color:white;" onclick="toggleModel()">👁️ Show Model Answer</button>
-      <button class="action-btn ${c}-lt ${c}-br ${c}-tx" style="border:2px solid;" onclick="toggleBreakdown()">🔍 See Breakdown</button>
+      <button class="action-btn ${c}-bg" style="color:white;" id="mb" onclick="toggleModel()">👁️ Show Sample Answer</button>
+      <button class="action-btn ${c}-lt ${c}-tx" style="border:2px solid ${solidMap[c]}55;" id="bb" onclick="toggleBd()">🔍 See Breakdown</button>
     </div>
-
-    <div class="model-box" id="model-box">
-      <div style="font-weight:700;color:#854d0e;font-size:.75rem;margin-bottom:.4rem;">📝 MODEL ANSWER</div>
+    <div class="model-box" id="mbox">
+      <div style="font-weight:700;color:#854d0e;font-size:.75rem;margin-bottom:.4rem;">📝 SAMPLE ANSWER</div>
       ${activeSc.model}
     </div>
-
-    <div class="breakdown-box ${c}-lt ${c}-br" id="breakdown-box" style="border:2px solid;">
-      <div style="font-weight:700;font-size:.875rem;margin-bottom:.6rem;" class="${c}-tx">🔍 Why this model answer works</div>
+    <div class="breakdown-box ${c}-lt" id="bdbox" style="border:2px solid ${solidMap[c]}55;">
+      <div style="font-weight:700;font-size:.875rem;margin-bottom:.6rem;color:${solidMap[c]};">🔍 Why this sample answer works</div>
       ${activeSc.breakdown.map(b=>`
-        <div class="breakdown-item" style="border:1px solid #e0e7ff;background:white;">
-          <span style="font-weight:700;" class="${c}-tx">${b.label}: </span>
+        <div class="breakdown-item">
+          <span style="font-weight:700;color:${solidMap[c]};">${b.label}: </span>
           <span style="color:#4b5563;">${b.note}</span>
         </div>`).join('')}
-    </div>
-
-    <button class="print-btn" id="print-btn" onclick="doPrint()">🖨️ Print My Answer & Model</button>`;
+    </div>`;
 }
-
-let modelVisible = false, breakdownVisible = false;
-function toggleModel() {
-  modelVisible = !modelVisible;
-  const box = document.getElementById('model-box');
-  box.style.display = modelVisible ? 'block' : 'none';
-  const btn = box.previousElementSibling.querySelector('button:first-child');
-  if (btn) btn.textContent = modelVisible ? '🙈 Hide Model Answer' : '👁️ Show Model Answer';
+function updateWC(){
+  const t=document.getElementById('pa').value.trim();
+  const w=t?t.split(/\s+/).length:0;
+  const b=document.getElementById('wcb');
+  b.textContent=w+' words';
+  b.className='wc-badge '+(w>=50&&w<=60?'wc-ok':w>60?'wc-bad':'wc-neutral');
 }
-function toggleBreakdown() {
-  breakdownVisible = !breakdownVisible;
-  const box = document.getElementById('breakdown-box');
-  box.style.display = breakdownVisible ? 'block' : 'none';
-  const btn = box.previousElementSibling.querySelector('button:last-child');
-  if (btn) btn.textContent = breakdownVisible ? 'Hide Breakdown' : '🔍 See Breakdown';
+function updateCC(){
+  const n=checklist.filter(ck=>document.getElementById('ck-'+ck.id)?.checked).length;
+  document.getElementById('cc').textContent=n;
+  document.getElementById('ckok').style.display=n===checklist.length?'block':'none';
 }
-
-function updateWC() {
-  const text = document.getElementById('post-area').value.trim();
-  const wc = text ? text.split(/\s+/).length : 0;
-  const badge = document.getElementById('wc-badge');
-  badge.textContent = wc + ' words';
-  badge.className = 'wc-badge ' + (wc>=50&&wc<=60 ? 'wc-ok' : wc>60 ? 'wc-bad' : 'wc-neutral');
-  document.getElementById('print-btn').style.display = text.length > 0 ? 'block' : 'none';
+function toggleModel(){
+  modelVis=!modelVis;
+  document.getElementById('mbox').style.display=modelVis?'block':'none';
+  document.getElementById('mb').textContent=modelVis?'🙈 Hide Sample Answer':'👁️ Show Sample Answer';
 }
-
-function updateCheckCount() {
-  const count = checklist.filter(c => document.getElementById('chk-'+c.id)?.checked).length;
-  document.getElementById('check-count').textContent = count;
-  document.getElementById('check-done').style.display = count === checklist.length ? 'block' : 'none';
+function toggleBd(){
+  bdVis=!bdVis;
+  document.getElementById('bdbox').style.display=bdVis?'block':'none';
+  document.getElementById('bb').textContent=bdVis?'Hide Breakdown':'🔍 See Breakdown';
 }
-
-function doPrint() {
-  const text = document.getElementById('post-area').value.trim();
-  const wc = text ? text.split(/\s+/).length : 0;
-  const sc = activeSc;
-  const checked = checklist.filter(c => document.getElementById('chk-'+c.id)?.checked);
-  const unchecked = checklist.filter(c => !document.getElementById('chk-'+c.id)?.checked);
-
-  const win = window.open('', '_blank');
-  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/>
-<title>LSC 1103 – ${sc.title}</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Segoe UI',Arial,sans-serif;color:#1f2937;padding:2rem;max-width:700px;margin:0 auto;font-size:14px;}
+function doPrint(){
+  if(!activeSc)return;
+  const sc=activeSc,ta=document.getElementById('pa');
+  const text=ta?ta.value.trim():'',wc=text?text.split(/\s+/).length:0;
+  const checked=checklist.filter(ck=>document.getElementById('ck-'+ck.id)?.checked);
+  const unchecked=checklist.filter(ck=>!document.getElementById('ck-'+ck.id)?.checked);
+  const appealKey=Object.keys(guideMap).find(k=>sc.appeal.includes(k))||'Logos';
+  const steps=guideMap[appealKey],wcOk=wc>=50&&wc<=60;
+  const name=(document.getElementById('sname')?.value.trim())||'';
+  const sid=(document.getElementById('sid')?.value.trim())||'';
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>LSC 1103 – ${sc.title}</title>
+<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI',Arial,sans-serif;color:#1f2937;padding:2rem;max-width:700px;margin:0 auto;font-size:14px;line-height:1.5;}
 .hbar{background:linear-gradient(to right,#7c3aed,#db2777);color:white;padding:1rem 1.2rem;border-radius:.75rem;margin-bottom:1.5rem;}
-.hbar h1{font-size:1.1rem;font-weight:800;}
-.hbar p{font-size:.75rem;opacity:.85;margin-top:.2rem;}
+.hbar h1{font-size:1.1rem;font-weight:800;}.hbar p{font-size:.75rem;opacity:.85;margin-top:.2rem;}
 .sec{border:2px solid #e5e7eb;border-radius:.75rem;padding:1rem 1.2rem;margin-bottom:1.2rem;}
-.sec-title{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem;}
-.row{display:flex;gap:.5rem;margin-bottom:.25rem;font-size:.875rem;}
-.lbl{color:#6b7280;min-width:5rem;flex-shrink:0;}
-.val{font-weight:600;}
-.tip{margin-top:.5rem;font-size:.8rem;color:#6b7280;font-style:italic;}
-.wc{display:inline-block;font-size:.75rem;font-weight:700;padding:.1rem .5rem;border-radius:999px;margin-left:.5rem;background:${wc>=50&&wc<=60?'#ccfbf1':'#fee2e2'};color:${wc>=50&&wc<=60?'#0f766e':'#dc2626'};}
-.student-text{font-size:.95rem;line-height:1.8;white-space:pre-wrap;}
-.model-text{font-size:.95rem;line-height:1.8;font-style:italic;}
-.chk{font-size:.8rem;display:flex;gap:.4rem;margin-bottom:.25rem;}
-.ok{color:#15803d;} .miss{color:#dc2626;}
-.bd{padding:.5rem .75rem;border-radius:.4rem;border:1px solid #e0e7ff;background:#f5f7ff;margin-bottom:.4rem;font-size:.8rem;}
-.bd strong{color:#4338ca;}
-hr{border:none;border-top:2px dashed #e5e7eb;margin:1.2rem 0;}
-footer{text-align:center;margin-top:1.5rem;font-size:.7rem;color:#9ca3af;}
-@media print{body{padding:1rem;}}
-</style></head><body>
-<div class="hbar"><h1>LSC 1103 – Social Media Communication Lab</h1><p>Writing Task: ${sc.title} &nbsp;|&nbsp; ${sc.type} &nbsp;|&nbsp; ${sc.appeal}</p></div>
-<div class="sec" style="border-color:#c7d2fe;">
-  <div class="sec-title" style="color:#4338ca;">📋 Scenario Brief</div>
-  ${[["Type",sc.type],["Appeal",sc.appeal],["Writer",sc.writer],["Audience",sc.audience],["Purpose",sc.purpose],["Context",sc.context]].map(([l,v])=>`<div class="row"><span class="lbl">${l}:</span><span class="val">${v}</span></div>`).join('')}
-  <div class="tip">💡 ${sc.tip}</div>
-</div>
-<div class="sec" style="border-color:#ddd6fe;">
-  <div class="sec-title" style="color:#6d28d9;">✍️ My Answer <span class="wc">${wc} words</span></div>
-  <div class="student-text">${text || '(no answer written)'}</div>
-</div>
-<div class="sec">
-  <div class="sec-title" style="color:#374151;">☑️ Self-Check</div>
-  ${checked.map(c=>`<div class="chk"><span class="ok">✓</span>${c.label}</div>`).join('')}
-  ${unchecked.map(c=>`<div class="chk"><span class="miss">✗</span>${c.label}</div>`).join('')}
-</div>
+.stitle{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.65rem;color:#374151;}
+.row{display:flex;gap:.5rem;margin-bottom:.25rem;}.lbl{color:#6b7280;min-width:5rem;flex-shrink:0;font-size:.85rem;}.val{font-weight:600;font-size:.85rem;}
+.step{display:flex;gap:.6rem;margin-bottom:.55rem;align-items:flex-start;}.snum{font-weight:700;min-width:2rem;font-size:.82rem;}.shint{background:#f8fafc;border:1px solid #e2e8f0;border-radius:.5rem;padding:.45rem .65rem;font-size:.78rem;color:#374151;flex:1;}
+.wctag{display:inline-block;font-size:.72rem;font-weight:700;padding:.1rem .45rem;border-radius:999px;margin-left:.4rem;background:${wcOk?'#ccfbf1':'#fee2e2'};color:${wcOk?'#0f766e':'#dc2626'};}
+.answer{font-size:.95rem;line-height:1.8;white-space:pre-wrap;min-height:4rem;color:#111;}.model{font-size:.95rem;line-height:1.8;font-style:italic;color:#111;}
+.chk{font-size:.8rem;display:flex;gap:.35rem;margin-bottom:.2rem;}.ok{color:#15803d;font-weight:700;}.miss{color:#dc2626;font-weight:700;}
+.bd{padding:.45rem .65rem;border-radius:.4rem;border:1px solid #e0e7ff;background:#f5f7ff;margin-bottom:.35rem;font-size:.78rem;}.bd strong{color:#4338ca;}
+.remind{padding:.5rem .75rem;border-radius:.5rem;background:#ede9fe;border:1px solid #ddd6fe;color:#6d28d9;font-size:.78rem;font-weight:600;margin-top:.6rem;}
+hr{border:none;border-top:2px dashed #e5e7eb;margin:1.2rem 0;}footer{text-align:center;margin-top:1.5rem;font-size:.7rem;color:#9ca3af;}
+@media print{body{padding:1rem;}}</style></head><body>
+<div class="hbar"><h1>LSC 1103 – Social Media Communication Lab</h1>
+<p>Writing Task: ${sc.title} &nbsp;|&nbsp; ${sc.type} &nbsp;|&nbsp; ${sc.appeal}${name?' &nbsp;|&nbsp; '+name:''}${sid?' ('+sid+')':''}</p></div>
+<div class="sec" style="border-color:#c7d2fe;"><div class="stitle" style="color:#4338ca;">📋 Scenario Brief</div>
+${[["Type",sc.type],["Appeal",sc.appeal],["Writer",sc.writer],["Audience",sc.audience],["Purpose",sc.purpose],["Context",sc.context]].map(([l,v])=>`<div class="row"><span class="lbl">${l}:</span><span class="val">${v}</span></div>`).join('')}</div>
+<div class="sec" style="border-color:#e2e8f0;background:#f8fafc;"><div class="stitle">✏️ Writing Guide — ${appealKey} Steps</div>
+${steps.map(s=>`<div class="step"><span class="snum">${s.step}</span><div class="shint">${s.hint}</div></div>`).join('')}
+<div class="remind">🎯 Remember: <strong>${sc.appeal}</strong> — ${appealKey==='Logos'?'use specific numbers and statistics from the context.':appealKey==='Ethos'?'establish credibility and authority first.':'use emotional, inclusive language that connects with feelings.'}</div></div>
+<div class="sec" style="border-color:#ddd6fe;"><div class="stitle" style="color:#6d28d9;">✍️ My Answer <span class="wctag">${wc} words</span></div><div class="answer">${text||'(not yet written)'}</div></div>
+<div class="sec"><div class="stitle">☑️ Self-Check</div>
+${checked.map(ck=>`<div class="chk"><span class="ok">✓</span>${ck.label}</div>`).join('')}
+${unchecked.map(ck=>`<div class="chk"><span class="miss">✗</span>${ck.label}</div>`).join('')}</div>
 <hr/>
-<div class="sec" style="border-color:#fde047;background:#fefce8;">
-  <div class="sec-title" style="color:#854d0e;">📝 Model Answer</div>
-  <div class="model-text">${sc.model}</div>
-</div>
-<div class="sec" style="border-color:#c7d2fe;background:#eef2ff;">
-  <div class="sec-title" style="color:#4338ca;">🔍 Why the Model Answer Works</div>
-  ${sc.breakdown.map(b=>`<div class="bd"><strong>${b.label}: </strong>${b.note}</div>`).join('')}
-</div>
+<div class="sec" style="border-color:#fde047;background:#fefce8;"><div class="stitle" style="color:#854d0e;">📝 Sample Answer</div><div class="model">${sc.model}</div></div>
+<div class="sec" style="border-color:#c7d2fe;background:#eef2ff;"><div class="stitle" style="color:#4338ca;">🔍 Why the Sample Answer Works</div>
+${sc.breakdown.map(b=>`<div class="bd"><strong>${b.label}: </strong>${b.note}</div>`).join('')}</div>
 <footer>LSC 1103 · Higher Colleges of Technology · Social Media Communication Lab</footer>
 </body></html>`);
-  win.document.close();
-  win.focus();
-  setTimeout(() => win.print(), 400);
+  w.document.close();w.focus();setTimeout(()=>w.print(),400);
 }
 
-/* ═══════════════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════
+   GLOSSARY
+═══════════════════════════════════════════════════ */
+let activeCat='all';
+function buildGlossary(){
+  const area=document.getElementById('glossary-area');
+  const cats=[...new Set(glossaryTerms.map(t=>t.cat))];
+  area.innerHTML=`
+    <div style="margin-bottom:.75rem;">
+      <input type="text" id="gSearch" class="g-search" placeholder="🔍 Search English or Arabic…" oninput="filterGlossary()">
+    </div>
+    <div class="cat-pills">
+      <button class="cat-pill active" onclick="setCat('all',this)">All (${glossaryTerms.length})</button>
+      ${cats.map(c=>`<button class="cat-pill" onclick="setCat('${c}',this)">${c}</button>`).join('')}
+    </div>
+    <div id="gCards"></div>`;
+  renderGlossaryCards('all','');
+}
+function setCat(cat,btn){
+  activeCat=cat;
+  document.querySelectorAll('.cat-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  filterGlossary();
+}
+function filterGlossary(){
+  const q=(document.getElementById('gSearch')?.value||'').toLowerCase();
+  renderGlossaryCards(activeCat,q);
+}
+function renderGlossaryCards(cat,q){
+  const filtered=glossaryTerms.filter(t=>{
+    const matchCat=cat==='all'||t.cat===cat;
+    const matchQ=!q||t.en.toLowerCase().includes(q)||t.ar.includes(q)||t.def.toLowerCase().includes(q)||t.ardef.includes(q);
+    return matchCat&&matchQ;
+  });
+  const area=document.getElementById('gCards');
+  if(!filtered.length){
+    area.innerHTML=`<div class="g-empty">No terms found. Try a different search.</div>`;return;
+  }
+  area.innerHTML=filtered.map(t=>`
+    <div class="g-card" style="border-color:${solidMap[t.color]}44;">
+      <div class="g-card-inner">
+        <div class="g-en" style="border-right:2px solid ${solidMap[t.color]}22;">
+          <div class="g-cat" style="color:${solidMap[t.color]};">${t.cat}</div>
+          <div class="g-term">${t.en}</div>
+          <div class="g-def">${t.def}</div>
+        </div>
+        <div class="g-ar" style="background:${lightMap[t.color]};">
+          <div class="g-cat" style="color:${solidMap[t.color]};">عربي</div>
+          <div class="g-term" style="font-size:1.05rem;">${t.ar}</div>
+          <div class="g-def">${t.ardef}</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════
    INIT
-═══════════════════════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════ */
 buildLearn();
 buildPractice();
 buildCreate();
+buildGlossary();
 </script>
 </body>
 </html>
